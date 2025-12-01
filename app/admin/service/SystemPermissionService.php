@@ -3,6 +3,8 @@
 namespace app\admin\service;
 
 
+use support\Db;
+
 class SystemPermissionService
 {
     /**
@@ -19,9 +21,7 @@ class SystemPermissionService
             $item['children'] = [];           // 预留 children 字段
             $itemsById[$item['id']] = $item;
         }
-
         $tree = [];
-
         // 再根据 parent_id 组装
         foreach ($itemsById as $id => &$item) {
             $parentId = $item['parent_id'];
@@ -40,5 +40,35 @@ class SystemPermissionService
         unset($item); // 解除引用
 
         return $tree;
+    }
+
+    public static function del(array $ids)
+    {
+        $updateData=[
+            'is_delete' => 1,
+            'updated_at'=>date('Y-m-d H:i:s',time())
+        ];
+        Db::beginTransaction();
+        try {
+            $id=Db::table('system_permission')
+                ->whereIn('id', $ids)
+                ->update($updateData);
+            if(!$id){
+                Db::rollBack();
+                throw new \Exception('删除失败');
+            }
+            $parentId=Db::table('system_permission')
+                ->whereIn('parent_id', $ids)
+                ->update($updateData);
+            if(!$parentId){
+                Db::rollBack();
+                throw new \Exception('子级删除失败');
+            }
+            Db::commit();
+            return true;
+        }catch (\Exception $e){
+            Db::rollBack();
+            return $e->getMessage();
+        }
     }
 }

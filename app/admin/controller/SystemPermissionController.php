@@ -2,6 +2,7 @@
 
 namespace app\admin\controller;
 
+use app\admin\service\SystemPermissionService;
 use app\admin\validate\SystemPermissionValidate;
 use support\Request;
 use support\Response;
@@ -12,8 +13,8 @@ class SystemPermissionController
 {
     public function getList(Request $request):response
     {
-        $where=[];
         $params=$request->all();
+        $where[]=['is_delete','=',0];
         if($params['name']){
             $where[]=['name','like','%'.$params['name'].'%'];
         }
@@ -39,7 +40,7 @@ class SystemPermissionController
     {
         $params=$request->all();
         BaseValidate::validate($params,'info');
-        $filed=['id','name','description','status','created_at','updated_at'];
+        $filed=['id','name','icon','parent_id','description','status'];
         $service=new BaseService('system_permission');
         $data=$service->getInfo(['id'=>$params['id']],$filed);
         return success($data) ;
@@ -70,7 +71,7 @@ class SystemPermissionController
     {
         $params=$request->post();
         $params['updated_at']=date('Y-m-d H:i:s',time());
-        SystemRoleValidate::validate($params,'edit');
+        SystemPermissionValidate::validate($params,'edit');
         $service=new BaseService('system_permission');
         if($service->edit(['id'=>$params['id']],$params))  {
             return success() ;
@@ -86,12 +87,13 @@ class SystemPermissionController
     public function delOperation(Request $request):response
     {
         $params=$request->all();
-        $params['updated_at']=date('Y-m-d H:i:s',time());
-        SystemRoleValidate::validate($request->all(),'delete');
-        $service=new BaseService('system_permission');
-        if($service->edit(['id'=>$params['id']],['is_delete'=>1]))  {
+        BaseValidate::validate($params,'info');
+        $service=new SystemPermissionService();
+        $idArray=explode(',',$params['id']);
+        $res=$service->del($idArray);
+        if($res===true)  {
             return success() ;
         }
-        return error() ;
+        return error($res) ;
     }
 }
