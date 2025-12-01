@@ -84,6 +84,7 @@ class AuthService
     public function registerAdmin($params):bool
     {
         $model=new AdminUserModel();
+        $params['password']=password_hash($params['phone'],PASSWORD_DEFAULT);
         return $model->addAdminUser($params);
     }
 }
