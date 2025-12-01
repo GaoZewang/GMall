@@ -10,33 +10,34 @@ use Tinywan\Jwt\JwtToken;
 
 class AuthService
 {
+
     /**
+     * 登录
      * @param $username
      * @param $password
-     * @param AdminUserModel $user
+     * @param $platform
      * @return array
      */
-    public function login($username,$password)
+    public function login($username,$password,$platform):array
     {
-        if (!$username || !$password) {
-            throw new \RuntimeException('用户名或密码不能为空','400');
+        if (!$username || !$password ||!$platform) {
+            throw new \RuntimeException('用户名或密码或平台不能为空','400');
         }
-        $where=['username'=>$username];
         $field=['*'];
-        $userInfo=AdminUserModel::getAdminUserInfo($where,$field);
+        $where=['username'=>$username];
+        $model=new AdminUserModel();
+        $userInfo=$model->getAdminUserInfo($where,$field);
         if (!$userInfo) {
             throw new \RuntimeException('用户不存在','400');
         }
         // 这里用你自己的用户表
-        if (!$userInfo || !password_verify($password, $userInfo['password'])) {
+        if (!password_verify($password, $userInfo['password'])) {
             throw new \RuntimeException('用户名或密码错误','400');
         }
-        $token= JwtAuthService::createToken($userInfo['id'],'admin','create');
-
-        return $token;  // 返回数组：access_token / refresh_token :contentReference[oaicite:1]{index=1}
+        return JwtAuthService::createToken($userInfo['id'],$platform,'create');
     }
 
-    public function logout($request)
+    public function logout($request):void
     {
         $oldToken= explode(' ',$request->header('Authorization'))[1];
         $payload = JwtAuthService::parseJwtPayload($oldToken);
@@ -48,9 +49,9 @@ class AuthService
 
     /**
      * 刷新token
-     * @return array|string
+     * @return array
      */
-    public function refresh()
+    public function refresh():array
     {
         $newToken=JwtToken::refreshToken();
         $accessToken  = $newToken['access_token'];
@@ -60,7 +61,29 @@ class AuthService
         if (!$uid) {
             throw new JwtTokenException('token payload 缺少 id',401013);
         }
-        $token= JwtAuthService::createToken($uid, $platform,'refresh',$newToken);
-        return $token;
+        return JwtAuthService::createToken($uid, $platform,'refresh',$newToken);
+    }
+
+    /**
+     * 修改密码
+     * @param $password
+     * @param $id
+     * @return bool
+     */
+    public function changePassword($password,$id): bool
+    {
+        $model=new AdminUserModel();
+        return $model->editAdminUser(['id'=>$id],['password'=>password_hash($password,PASSWORD_DEFAULT)]);
+    }
+
+    /**
+     * 注册管理员
+     * @param $params
+     * @return bool
+     */
+    public function registerAdmin($params):bool
+    {
+        $model=new AdminUserModel();
+        return $model->addAdminUser($params);
     }
 }

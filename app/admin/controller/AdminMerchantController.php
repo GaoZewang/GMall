@@ -2,13 +2,14 @@
 
 namespace app\admin\controller;
 
-use support\Request;
-use support\Response;
-use app\service\BaseService;
-use app\validate\BaseValidate;
 use app\admin\service\SystemPermissionService;
 use app\admin\validate\SystemPermissionValidate;
-class SystemPermissionController
+use app\service\BaseService;
+use app\validate\BaseValidate;
+use support\Request;
+use support\Response;
+
+class AdminMerchantController
 {
     public function getList(Request $request):response
     {
@@ -21,7 +22,7 @@ class SystemPermissionController
             $where[]=['route_url','like','%'.$params['url'].'%'];
         }
         $filed=['id','name','code','route_url','icon','description','parent_id'];
-        $service=new BaseService('system_permission');
+        $service=new BaseService('admin_merchant');
         $data=$service->getList($where,$filed);
         //如果不为空则进行树形结构返回
         if(!empty($data)){
@@ -40,7 +41,7 @@ class SystemPermissionController
         $params=$request->all();
         BaseValidate::validate($params,'info');
         $filed=['id','name','icon','parent_id','description','status'];
-        $service=new BaseService('system_permission');
+        $service=new BaseService('admin_merchant');
         $data=$service->getInfo(['id'=>$params['id']],$filed);
         return success($data) ;
     }
@@ -54,7 +55,7 @@ class SystemPermissionController
     {
         $params=$request->post();
         SystemPermissionValidate::validate($params,'add');
-        $service=new BaseService('system_permission');
+        $service=new BaseService('admin_merchant');
         if($service->add($params))  {
             return success() ;
         }
@@ -71,7 +72,7 @@ class SystemPermissionController
         $params=$request->post();
         $params['updated_at']=date('Y-m-d H:i:s',time());
         SystemPermissionValidate::validate($params,'edit');
-        $service=new BaseService('system_permission');
+        $service=new BaseService('admin_merchant');
         if($service->edit(['id'=>$params['id']],$params))  {
             return success() ;
         }
