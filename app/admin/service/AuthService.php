@@ -28,6 +28,7 @@ class AuthService
         $where=['username'=>$username];
         $model=new AdminUserModel();
         $userInfo=$model->getAdminUserInfo($where,$field);
+        print_r($userInfo);
         if (!$userInfo) {
             throw new \RuntimeException('用户不存在','400');
         }
@@ -44,6 +45,11 @@ class AuthService
         return JwtAuthService::createToken($userInfo['id'],$platform,'create');
     }
 
+    /**
+     * 登出
+     * @param $request
+     * @return void
+     */
     public function logout($request):void
     {
         $oldToken= explode(' ',$request->header('Authorization'))[1];
@@ -95,14 +101,4 @@ class AuthService
         return $model->addAdminUser($params);
     }
 
-    public function getAdminUserInfo($id):array
-    {
-        $model=new AdminUserModel();
-        $data=$model->getAdminUserInfo(['id'=>$id],);
-        $role=['admin'=>'1','merchant'=>'2','store'=>'3'];
-//        if(!empty($data)){
-//            $data['role_name']=
-//        }
-        return $data;
-    }
 }

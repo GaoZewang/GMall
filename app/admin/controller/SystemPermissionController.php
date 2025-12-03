@@ -12,14 +12,14 @@ class SystemPermissionController
 {
     public function getList(Request $request):response
     {
-        $params=$request->all();
-        $where[]=['is_delete','=',0];
+        $params=$request->get();
         if($params['name']){
             $where[]=['name','like','%'.$params['name'].'%'];
         }
         if($params['url']){
             $where[]=['route_url','like','%'.$params['url'].'%'];
         }
+        $where[]=['is_delete','=',0];
         $filed=['id','name','code','route_url','icon','description','parent_id'];
         $service=new BaseService('system_permission');
         $data=$service->getList($where,$filed);

@@ -1,8 +1,5 @@
 <?php
 use Webman\Route;
-
-// 这里的实际路径是：/admin/login、/admin/refresh ...
-// 因为外面 config/route.php 已经 group('/admin') 了
 Route::post('/login',   [app\admin\controller\AdminUserController::class, 'login']);
 Route::get('/refresh',  [app\admin\controller\AdminUserController::class, 'refreshToken']);
 Route::group('', function () {

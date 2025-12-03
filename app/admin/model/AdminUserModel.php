@@ -111,7 +111,7 @@ class AdminUserModel extends Model
      */
     public function getAdminUserInfo(array $where, $field = ['*']): array
     {
-        $field=['id','username','email','phone','role_id','status','last_login','last_ip'];
+        $field=['id','username','password','email','phone','role_id','status','last_login','last_ip'];
         return $this->where($where)->first($field)?->toArray() ?? [];
     }
 

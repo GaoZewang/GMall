@@ -51,7 +51,7 @@ return [
             //默认当成普通用户
             if ($platform === 'user') {
                 $model=BaseModel::make('user','id',false);
-                $filed=['id', 'username', 'email', 'phone', 'avatar','status'];
+                $filed=['id', 'username', 'email', 'nickname','phone', 'avatar','balance','status'];
             }else{
                 $model=BaseModel::make('admin_user','id',false);
                 $filed=['id', 'username', 'email', 'status','last_login','last_ip','role_id'];

@@ -22,6 +22,11 @@ foreach ($modules as $name => $module) {
                 require $file;
                 continue;
             }
+            if ($filename === 'api') {
+                // 里面写 /login、/logout 这种
+                require $file;
+                continue;
+            }
             // 其他文件以文件名为前缀：role.php => /role、user.php => /user
             Route::group('/' . $filename, function () use ($file) {
                 require $file; // 文件里只写 /list、/info 即可
