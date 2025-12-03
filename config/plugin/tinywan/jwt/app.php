@@ -54,7 +54,7 @@ return [
                 $filed=['id', 'username', 'email', 'phone', 'avatar','status'];
             }else{
                 $model=BaseModel::make('admin_user','id',false);
-                $filed=['id', 'username', 'email', 'created_at','role_id'];
+                $filed=['id', 'username', 'email', 'status','last_login','last_ip','role_id'];
             }
             return $model->where('id', $uid)->select($filed)->first();
         },

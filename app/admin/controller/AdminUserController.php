@@ -16,7 +16,8 @@ class AdminUserController
     public function register(Request $request,AuthService $authService): Response
     {
         $params=$request->all();
-        if( $authService->registerAdmin($params)) {
+        $res=$authService->registerAdmin($params);
+        if($res) {
             return success();
         }
        return error();
@@ -31,7 +32,8 @@ class AdminUserController
     public function editPassword(Request $request,AuthService $authService): Response
     {
         $password=$request->post('password');
-        if( $authService->changePassword($request->uid,$password)) {
+        $res=$authService->changePassword($request->uid,$password);
+        if($res) {
           return success();
         }
         return error();
@@ -62,6 +64,19 @@ class AdminUserController
     {
         $authService->logout($request);
         return success();
+    }
+
+    /**
+     * 获取用户信息
+     * @param Request $request
+     * @param AuthService $authService
+     * @return Response
+     */
+    public function getUserInfo(Request $request):Response
+    {
+        $userInfo=$request->user;
+        $userInfo['role_name']=$request->platform;
+        return success($request->user);
     }
 
     /**

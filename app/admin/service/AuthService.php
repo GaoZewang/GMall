@@ -20,6 +20,7 @@ class AuthService
      */
     public function login($username,$password,$platform):array
     {
+        $role=['admin'=>1,'merchant'=>2,'store'=>3];
         if (!$username || !$password ||!$platform) {
             throw new \RuntimeException('用户名或密码或平台不能为空','400');
         }
@@ -29,6 +30,12 @@ class AuthService
         $userInfo=$model->getAdminUserInfo($where,$field);
         if (!$userInfo) {
             throw new \RuntimeException('用户不存在','400');
+        }
+        if($userInfo['status']!=1){
+            throw new \RuntimeException('用户被禁用','400');
+        }
+        if($role[$platform]!=$userInfo['role_id']){
+            throw new \RuntimeException('用户适用平台错误','400');
         }
         // 这里用你自己的用户表
         if (!password_verify($password, $userInfo['password'])) {
@@ -70,7 +77,7 @@ class AuthService
      * @param $id
      * @return bool
      */
-    public function changePassword($password,$id): bool
+    public function changePassword($id,$password): bool
     {
         $model=new AdminUserModel();
         return $model->editAdminUser(['id'=>$id],['password'=>password_hash($password,PASSWORD_DEFAULT)]);
@@ -86,5 +93,16 @@ class AuthService
         $model=new AdminUserModel();
         $params['password']=password_hash($params['phone'],PASSWORD_DEFAULT);
         return $model->addAdminUser($params);
+    }
+
+    public function getAdminUserInfo($id):array
+    {
+        $model=new AdminUserModel();
+        $data=$model->getAdminUserInfo(['id'=>$id],);
+        $role=['admin'=>'1','merchant'=>'2','store'=>'3'];
+//        if(!empty($data)){
+//            $data['role_name']=
+//        }
+        return $data;
     }
 }

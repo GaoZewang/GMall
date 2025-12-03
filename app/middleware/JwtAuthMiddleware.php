@@ -25,6 +25,7 @@ class JwtAuthMiddleware
         // 挂在 request 上，后面控制器可以直接用
         $request->uid  = $uid;
         $request->user = $user;
+        $request->platform = $platform;
         return $handler($request);
     }
 }

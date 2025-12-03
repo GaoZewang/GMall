@@ -7,7 +7,7 @@ use support\Response;
 use app\service\BaseService;
 use app\admin\validate\SystemRoleValidate;
 use app\validate\BaseValidate;
-class SystemRoleController extends BaseController
+class SystemRoleController
 {
     /**
      * 列表
