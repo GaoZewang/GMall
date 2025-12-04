@@ -13,10 +13,10 @@ class SystemPermissionController
     public function getList(Request $request):response
     {
         $params=$request->get();
-        if($params['name']){
+        if(!empty($params['name'])){
             $where[]=['name','like','%'.$params['name'].'%'];
         }
-        if($params['url']){
+        if(!empty($params['url'])){
             $where[]=['route_url','like','%'.$params['url'].'%'];
         }
         $where[]=['is_delete','=',0];
