@@ -15,9 +15,9 @@ class LoginController
      */
     public function login(Request $request,LoginService $loginService):Response
     {
-        $username=$request->post('username');
+        $account=$request->post('account');
         $password=$request->post('password');
-        $token=$loginService->login($username,$password);
+        $token=$loginService->login($account,$password);
         return success($token);
     }
 
@@ -30,7 +30,8 @@ class LoginController
     public function register(Request $request,LoginService $loginService):Response
     {
         $params=$request->post();
-        $params['nickname']=$params['username'];
+        $params['username']=$params['account'];
+        $params['nickname']=$params['account'];
         $params['register_channel']='web';
         $params['password']=password_hash($params['password'],PASSWORD_DEFAULT);
         $token= $loginService->register($params);

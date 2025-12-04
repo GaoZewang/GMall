@@ -16,12 +16,12 @@ class LoginService
      * @param $password
      * @return array|string
      */
-    public function login($username, $password): array|string
+    public function login($account, $password): array|string
     {
-        if (!$username || !$password) {
+        if (!$account || !$password) {
             throw new \RuntimeException('用户名或密码或平台不能为空','400');
         }
-        $userInfo = BaseModel::make('user')->where('username', $username)->first()->toArray();
+        $userInfo = BaseModel::make('user')->where('account', $account)->first()->toArray();
         if (!$userInfo) {
             throw new \RuntimeException('用户不存在');
         }

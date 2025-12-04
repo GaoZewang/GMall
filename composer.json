@@ -31,7 +31,8 @@
     "workerman/validation": "^3.1",
     "tinywan/jwt": "^1.13",
     "webman/redis": "^2.1",
-    "illuminate/events": "^12.40"
+    "illuminate/events": "^12.40",
+    "webman/console": "^2.1"
   },
   "suggest": {
     "ext-event": "For better performance. "
