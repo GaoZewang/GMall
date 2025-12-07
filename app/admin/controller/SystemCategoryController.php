@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 
+use app\validate\BaseValidate;
 use support\Request;
 use support\Response;
 use app\service\BaseService;
@@ -43,8 +44,18 @@ class SystemCategoryController
     public function getInfo(Request $request):Response
     {
         $params=$request->get();
+        BaseValidate::validate($params,'info');
         $service=new BaseService('system_category');
         $data=$service->getInfo(['id'=>$params['id']]);
+        if(!empty($data)){
+            $data['parent_info']=[
+                'id'=>0,
+                'category_name'=>'顶级分类'
+            ];
+            if($data['parent_id']!=0){
+                $data['parent_info']=$service->getInfo(['id'=>$data['parent_id']],['id','category_name']);
+            }
+        }
         return success($data);
     }
 
@@ -58,9 +69,9 @@ class SystemCategoryController
     {
         $params=$request->post();
         $service=new BaseService('system_category');
-        $data=SystemCategoryService::getLevelAndParentTreePath($params['parent_id'],$params);
-        SystemCategoryValidate::validate($data,'add');
-        $res=$service->add($data);
+        SystemCategoryService::getLevelAndParentTreePath($params['parent_id'],$params);
+        SystemCategoryValidate::validate($params,'add');
+        $res=$service->add($params);
         if($res){
             return success();
         }
@@ -78,7 +89,7 @@ class SystemCategoryController
         $service=new BaseService('system_category');
         $data=SystemCategoryService::getLevelAndParentTreePath($params['parent_id'],$params);
         SystemCategoryValidate::validate($data,'edit');
-        $res=$service->edit([$data['id']],$data);
+        $res=$service->edit(['id'=>$data['id']],$data);
         if($res){
             return success();
         }
@@ -91,6 +102,14 @@ class SystemCategoryController
      * @return Response
      */
     public function delOperation(Request $request):response{
+        $params=$request->post();
+        $service=new BaseService('system_category');
+        $data=SystemCategoryService::getLevelAndParentTreePath($params['parent_id'],$params);
+        SystemCategoryValidate::validate($data,'status');
+        $res=$service->edit([$data['id']],['category_status'=>0]);
+        if($res){
+            return success();
+        }
         return error();
     }
 }

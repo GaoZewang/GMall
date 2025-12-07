@@ -22,20 +22,16 @@ class SystemCategoryValidate
         $scenes=[
             'add'=>[
                 'category_name' => Validator::stringType()->notEmpty()->setName('category_name'),
-                'parent_id' => Validator::stringType()->notEmpty()->setName('parent_id'),
-                'category_level' => Validator::stringType()->notEmpty()->setName('category_level'),
-                'is_leaf' => Validator::stringType()->notEmpty()->setName('is_leaf'),
+                'category_level' => Validator::notEmpty()->setName('category_level'),
             ],
             'edit'=>[
                 'id' => Validator::intVal()->positive()->setName('ID'),
                 'category_name' => Validator::stringType()->notEmpty()->setName('category_name'),
-                'parent_id' => Validator::stringType()->notEmpty()->setName('parent_id'),
-                'category_level' => Validator::stringType()->notEmpty()->setName('category_level'),
-                'is_leaf' => Validator::stringType()->notEmpty()->setName('is_leaf'),
+                'category_level' => Validator::notEmpty()->setName('category_level'),
             ],
             'status'=>[
                 'id' => Validator::intVal()->positive()->setName('ID'),
-                'status' => Validator::intVal()->in([0,1])->setName('Status'),
+                'category_status' => Validator::intVal()->in([0,1])->setName('Status'),
             ],
         ];
         Validator::input($data, $scenes[$scene]);

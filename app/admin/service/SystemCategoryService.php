@@ -14,7 +14,7 @@ class SystemCategoryService
 {
    public static function getLevelAndParentTreePath($parentId,&$params)
    {
-       if ($parentId === 0) {
+       if ($parentId == 0) {
            // 顶级类目
            $level = 1;
            $parentTreePath = ''; // 顶级没有父路径
@@ -22,7 +22,7 @@ class SystemCategoryService
            // 查询父类目
            $parent = BaseModel::make('system_category')
                ->where('id', $parentId)
-               ->where('status', 1)       // 可选：只允许挂在启用类目下
+               ->where('category_status', 1)       // 可选：只允许挂在启用类目下
                ->first();
            if (!$parent) {
                throw new \RuntimeException('父类目不存在或已禁用');
