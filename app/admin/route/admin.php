@@ -7,6 +7,11 @@ Route::group('', function () {
     Route::post('/register',   [app\admin\controller\AdminUserController::class, 'register']);
     Route::post('/editPassword',   [app\admin\controller\AdminUserController::class, 'editPassword']);
     Route::get('/getUserInfo',   [app\admin\controller\AdminUserController::class, 'getUserInfo']);
+    //后台文件上传
+    Route::group('/upload', function () {
+        Route::post('/single',   [app\BaseController::class, 'single']);
+        Route::post('/multi',   [app\BaseController::class, 'single']);
+    });
     //系统权限
     Route::group('/permission', function () {
         Route::get('/list', [app\admin\controller\SystemPermissionController::class, 'getList']);
