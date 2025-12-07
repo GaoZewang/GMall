@@ -7,3 +7,4 @@
 .env
 /tests/tmp
 /tests/.phpunit.result.cache
+/public/upload
