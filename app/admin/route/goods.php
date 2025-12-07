@@ -7,8 +7,10 @@
  */
 use Webman\Route;
 Route::group('',function (){
-    Route::get('/list', [app\admin\controller\GoodsController::class, 'getList']);
-    Route::get('/info',   [app\admin\controller\GoodsController::class, 'getInfo']);
+    Route::get('/list',    [app\admin\controller\GoodsController::class, 'getList']);
+    Route::get('/info',    [app\admin\controller\GoodsController::class, 'getInfo']);
+    Route::post('/create', [app\admin\controller\GoodsController::class, 'createOption']);
+    Route::post('/update', [app\admin\controller\GoodsController::class, 'updateOption']);
 
 })->middleware([
     app\middleware\JwtAuthMiddleware::class,
