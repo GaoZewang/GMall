@@ -33,7 +33,7 @@ class UserController
         if(isset($params['password'])){
             unset($params['password']);
         }
-        $res= $service->edit($request->uid,$params);
+        $res= $service->edit(['id'=>$request->uid],$params);
         if($res){
             return success();
         }

@@ -11,6 +11,12 @@ use Tinywan\Jwt\JwtToken;
 class AuthService
 {
 
+    protected array $role=[
+        'admin'=>1,
+        'merchant'=>2,
+        'store'=>3
+    ];
+
     /**
      * 登录
      * @param $username
@@ -20,7 +26,6 @@ class AuthService
      */
     public function login($username,$password,$platform):array
     {
-        $role=['admin'=>1,'merchant'=>2,'store'=>3];
         if (!$username || !$password ||!$platform) {
             throw new \RuntimeException('用户名或密码或平台不能为空','400');
         }
@@ -28,14 +33,13 @@ class AuthService
         $where=['username'=>$username];
         $model=new AdminUserModel();
         $userInfo=$model->getAdminUserInfo($where,$field);
-        print_r($userInfo);
         if (!$userInfo) {
             throw new \RuntimeException('用户不存在','400');
         }
         if($userInfo['status']!=1){
             throw new \RuntimeException('用户被禁用','400');
         }
-        if($role[$platform]!=$userInfo['role_id']){
+        if($this->role[$platform]!=$userInfo['role_id']){
             throw new \RuntimeException('用户适用平台错误','400');
         }
         // 这里用你自己的用户表

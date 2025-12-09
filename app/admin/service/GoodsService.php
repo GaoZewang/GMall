@@ -37,8 +37,18 @@ class GoodsService
         $goodsModel=BaseModel::make('goods');
         $data=$goodsModel->getInfo(['id'=>$id],$fields);
         if(!empty($data)){
+            $data['images']=json_decode($data['images'],true);
+            $data['attrs_template']=json_decode($data['attrs_template'],true);
             $skuModel=BaseModel::make('goods_sku');
-            $data['sku']=$skuModel->getList(['goods_id'=>$id],['*'],'id','desc');
+            $skuData=$skuModel->getList(['goods_id'=>$id],['*'],'id','desc');
+            if(!empty($skuData)){
+                foreach ($skuData as &$sku) {
+                    $sku['attrs']=json_decode($sku['attrs'],true);
+                }
+            }else{
+                $skuData=[];
+            }
+            $data['sku']=$skuData;
         }
         return $data;
     }

@@ -28,7 +28,7 @@ class GoodsController
         $where[]=['is_deleted','=',0];
         BaseValidate::validate($params,'list');
         $service=new BaseService('goods');
-        $filed=['id','merchant_id','goods_name','subtitle','category_id','goods_status'];
+        $filed=['id','merchant_id','goods_name','subtitle','category_id','cover_image','goods_status'];
         $data=$service->getListWithPage($where,$filed);
         return success($data);
     }
@@ -44,6 +44,7 @@ class GoodsController
         BaseValidate::validate($params,'info');
         $service=new GoodsService;
         $data=$service->getGoodsInfo($params['id'],['*']);
+
         return success($data);
     }
 
