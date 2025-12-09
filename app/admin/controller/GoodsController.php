@@ -47,6 +47,11 @@ class GoodsController
         return success($data);
     }
 
+    /**
+     * 添加商品
+     * @param Request $request
+     * @return Response
+     */
     public function createOption(Request $request):Response
     {
         $goodService=new GoodsService;
@@ -57,6 +62,11 @@ class GoodsController
         return error('添加失败');
     }
 
+    /**
+     * 修改商品
+     * @param Request $request
+     * @return Response
+     */
     public function updateOption(Request $request):Response
     {
         $goodService=new GoodsService;
