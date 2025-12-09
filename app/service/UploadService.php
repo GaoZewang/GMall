@@ -1,6 +1,8 @@
 <?php
 namespace app\service;
 
+use app\model\BaseModel;
+use support\Model;
 use Webman\Http\UploadFile;
 use support\Db;
 
@@ -15,6 +17,21 @@ class UploadService
         $cfg        = $config ?? config('upload', []);
         $this->root = rtrim($cfg['root'] ?? public_path() . '/upload', '/');
         $this->url  = rtrim($cfg['url'] ?? '/upload', '/');
+    }
+
+
+    /**
+     * 返回文件列表
+     * @param array $where
+     * @param int $page
+     * @param int $pageSize
+     * @return array
+     */
+    public function getFileList(array $where, int $page, int $pageSize)
+    {
+        $model=BaseModel::make($this->table);
+        return $model->getListWithPage($where, $page, $pageSize);
+
     }
 
     /**

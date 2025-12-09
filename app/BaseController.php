@@ -4,36 +4,56 @@ namespace app;
 
 use support\Request;
 use app\service\UploadService;
+use support\Response;
+
 class BaseController
 {
-    // 单文件上传
-    public function single(Request $request)
+
+    /**
+     * 文件列表
+     * @param Request $request
+     * @param UploadService $service
+     * @return Response
+     */
+    public function getFileList(Request $request ,UploadService $service):Response
+    {
+        $where=[];
+        $params=$request->get();
+        $where[]=['scene','=',$params['scene']];
+        $page = $request->get('page', 1);
+        $pageSize = $request->get('pageSize', 10);
+        $data=$service->getFileList($where, $page, $pageSize);
+        return success($data);
+    }
+
+    /**
+     * 单文件上传
+     * @param Request $request
+     * @param UploadService $service
+     * @return Response
+     */
+    public function single(Request $request,UploadService $service):Response
     {
         $file = $request->file('file'); // input name="file"
         $scene=  $request->post('scene');
         if (!$file) {
             return json(['code' => 1, 'msg' => '请上传文件']);
         }
-        $service = new UploadService();
         $data = $service->uploadSingleWithDedup($file, '', $scene);
-
-        return json(['code' => 0, 'msg' => '上传成功', 'data' => $data]);
+        return success($data);
     }
 
-    // 多文件上传
-    // 多图片上传（带去重）
-    public function imageMulti(Request $request)
+    /**
+     * 多文件上传
+     * @param Request $request
+     * @param UploadService $service
+     * @return Response
+     */
+    public function imageMulti(Request $request,UploadService $service):Response
     {
-        // input name="images[]" multiple
         $files = $request->file('files') ?? [];
         $scene=  $request->post('scene');
-        $service = new UploadService();
         $data = $service->uploadMultipleWithDedup($files, $scene, $scene);
-
-        return json([
-            'code' => 0,
-            'msg'  => '上传完成',
-            'data' => $data,
-        ]);
+        return success($data);
     }
 }

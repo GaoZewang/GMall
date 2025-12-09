@@ -14,7 +14,25 @@ use support\Db;
 
 class GoodsService
 {
-    public function getGoodsInfo($id,$fields=['*']): array
+
+    /**
+     * 处理json字段
+     * @param array $data
+     * @param string $key
+     * @return string|null
+     */
+    private function encodeJsonField(array $data, string $key):?string
+    {
+        return !empty($data[$key]) ? json_encode($data[$key], JSON_UNESCAPED_UNICODE) : null;
+    }
+
+    /**
+     * 获取商品信息
+     * @param int $id
+     * @param array $fields
+     * @return array
+     */
+    public function getGoodsInfo(int $id,array $fields=['*']): array
     {
         $goodsModel=BaseModel::make('goods');
         $data=$goodsModel->getInfo(['id'=>$id],$fields);
@@ -27,7 +45,6 @@ class GoodsService
 
     /**
      * 创建商户商品（SPU + SKU）
-     *
      * @param int   $merchantId 商户ID
      * @param array $data       前端提交的数据（已解析为数组）
      * @return int              新建 goods_id
@@ -35,8 +52,8 @@ class GoodsService
     public  function createGoods(int $merchantId, array $data): int
     {
         // 2. 处理 JSON 字段
-        $images         = !empty($data['images']) ? json_encode($data['images'], JSON_UNESCAPED_UNICODE) : null;
-        $attrsTemplate  = !empty($data['attrs_template']) ? json_encode($data['attrs_template'], JSON_UNESCAPED_UNICODE) : null;
+        $images        = $this->encodeJsonField($data, 'images');
+        $attrsTemplate = $this->encodeJsonField($data, 'attrs_template');
         if (empty($data['sku_list']) || !is_array($data['sku_list'])) {
             throw new \RuntimeException('至少需要一个SKU');
         }
@@ -90,7 +107,6 @@ class GoodsService
 
     /**
      * 修改商户商品（SPU + SKU）
-     *
      * @param int   $merchantId 商户ID
      * @param array $data       前端提交的数据（已解析为数组）
      * @return int              新建 goods_id
@@ -99,8 +115,8 @@ class GoodsService
     {
         $goodsId=$data['id'];
         // 2. 处理 JSON 字段
-        $images         = !empty($data['images']) ? json_encode($data['images'], JSON_UNESCAPED_UNICODE) : null;
-        $attrsTemplate  = !empty($data['attrs_template']) ? json_encode($data['attrs_template'], JSON_UNESCAPED_UNICODE) : null;
+        $images        = $this->encodeJsonField($data, 'images');
+        $attrsTemplate = $this->encodeJsonField($data, 'attrs_template');
         if (empty($data['sku_list']) || !is_array($data['sku_list'])) {
             throw new \RuntimeException('至少需要一个SKU');
         }
@@ -187,5 +203,13 @@ class GoodsService
         }
     }
 
-
+    /**
+     * 删除商户商品
+     * @param array $where
+     * @return bool
+     */
+    public function deleteGoods(array $where): bool
+    {
+        return BaseModel::make('goods')->where($where)->update(['is_deleted'=>1]);
+    }
 }

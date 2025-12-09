@@ -62,13 +62,42 @@ class GoodsController
         $goodService=new GoodsService;
         $res= $goodService->updateGoods(0,$request->post());
         if($res){
-            return success($res);
+            return success();
         }
         return error('编辑失败');
     }
 
-    public function deleteOption()
+    /**
+     * 修改商品状态(上下架)
+     * @param Request $request
+     * @return Response
+     */
+    public function updateGoodsStatus(Request $request):Response
     {
+        $params=$request->get();
+        $goodsService=new BaseService('goods');
+        $res= $goodsService->edit(['id'=>$params['id']],['goods_status'=>$params['status']]);
+        if($res){
+            return success();
+        }
+        return error('编辑失败');
+    }
 
+    /**
+     * 删除商品
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteOption(Request $request):Response
+    {
+        $goodService=new GoodsService;
+        $params=$request->get();
+        BaseValidate::validate($params,'info');
+        $id=explode(',',$params['id']);
+        $res= $goodService->deleteGoods(['id'=>$id]);
+        if($res){
+            return success();
+        }
+        return error('删除失败');
     }
 }
