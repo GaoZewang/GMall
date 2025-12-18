@@ -39,7 +39,7 @@ class BaseController
         if (!$file) {
             return json(['code' => 1, 'msg' => '请上传文件']);
         }
-        $data = $service->uploadSingleWithDedup($file, '', $scene);
+        $data = $service->uploadSingleWithDeduce($file, '', $scene);
         return success($data);
     }
 
@@ -53,7 +53,7 @@ class BaseController
     {
         $files = $request->file('files') ?? [];
         $scene=  $request->post('scene');
-        $data = $service->uploadMultipleWithDedup($files, $scene, $scene);
+        $data = $service->uploadMultipleWithDeduce($files, $scene, $scene);
         return success($data);
     }
 }

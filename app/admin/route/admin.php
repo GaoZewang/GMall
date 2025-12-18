@@ -9,8 +9,9 @@ Route::group('', function () {
     Route::get('/getUserInfo',   [app\admin\controller\AdminUserController::class, 'getUserInfo']);
     //后台文件上传
     Route::group('/upload', function () {
-        Route::post('/single',   [app\BaseController::class, 'single']);
-        Route::post('/multi',   [app\BaseController::class, 'single']);
+        Route::post('/single',  [app\BaseController::class, 'single']);
+        Route::post('/multi',   [app\BaseController::class, 'imageMulti']);
+        Route::get('/fileList',   [app\BaseController::class, 'getFileList']);
     });
     //系统权限
     Route::group('/permission', function () {

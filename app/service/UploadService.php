@@ -41,7 +41,7 @@ class UploadService
      * @param string|null $dir   为空则自动根据文件类型决定目录（images/videos/docs 等）
      * @param string $scene      业务场景：goods/avatar/banner...
      */
-    public function uploadSingleWithDedup(UploadFile $file, ?string $dir = null, string $scene = ''): array
+    public function uploadSingleWithDeduce(UploadFile $file, ?string $dir = null, string $scene = ''): array
     {
         if (!$file->isValid()) {
             throw new \RuntimeException('上传文件无效');
@@ -147,7 +147,7 @@ class UploadService
     /**
      * 多文件上传（自动按类型分目录 + 去重）
      */
-    public function uploadMultipleWithDedup(array $files, ?string $dir = null, string $scene = ''): array
+    public function uploadMultipleWithDeduce(array $files, ?string $dir = null, string $scene = ''): array
     {
         $result = [];
         foreach ($files as $file) {
@@ -158,7 +158,7 @@ class UploadService
                 continue;
             }
 
-            $result[] = $this->uploadSingleWithDedup($file, $dir, $scene);
+            $result[] = $this->uploadSingleWithDeduce($file, $dir, $scene);
         }
         return $result;
     }
