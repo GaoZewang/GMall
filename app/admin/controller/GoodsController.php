@@ -9,6 +9,7 @@
 namespace app\admin\controller;
 
 use app\admin\service\GoodsService;
+use app\admin\validate\GoodsValidate;
 use app\service\BaseService;
 use app\validate\BaseValidate;
 use support\Request;
@@ -56,6 +57,7 @@ class GoodsController
     public function createOption(Request $request):Response
     {
         $goodService=new GoodsService;
+        GoodsValidate::validate($request->post(),'add');
         $res= $goodService->createGoods(0,$request->post());
         if($res){
             return success($res);
@@ -71,6 +73,7 @@ class GoodsController
     public function updateOption(Request $request):Response
     {
         $goodService=new GoodsService;
+        GoodsValidate::validate($request->post(),'edit');
         $res= $goodService->updateGoods(0,$request->post());
         if($res){
             return success();
@@ -87,6 +90,7 @@ class GoodsController
     {
         $params=$request->get();
         $goodsService=new BaseService('goods');
+        GoodsValidate::validate($request->post(),'status');
         $res= $goodsService->edit(['id'=>$params['id']],['goods_status'=>$params['status']]);
         if($res){
             return success();

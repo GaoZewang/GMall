@@ -20,5 +20,12 @@ namespace support;
  */
 class Request extends \Webman\Http\Request
 {
-
+    public function page(): int
+    {
+        return (int)$this->get('page', 1);
+    }
+    public function pageSize(): int
+    {
+        return (int)$this->get('page_size', 10);
+    }
 }

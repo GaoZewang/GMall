@@ -3,7 +3,9 @@
 namespace app\admin\controller;
 
 use app\admin\service\SystemPermissionService;
+use app\admin\validate\MerchantValidate;
 use app\admin\validate\SystemPermissionValidate;
+use app\model\BaseModel;
 use app\service\BaseService;
 use app\validate\BaseValidate;
 use support\Request;
@@ -11,23 +13,22 @@ use support\Response;
 
 class AdminMerchantController
 {
+    /**
+     * 商户列表
+     * @param Request $request
+     * @return Response
+     */
     public function getList(Request $request):response
     {
         $params=$request->all();
+        BaseValidate::validate($params,'list');
         $where[]=['is_delete','=',0];
         if($params['name']){
             $where[]=['name','like','%'.$params['name'].'%'];
         }
-        if($params['url']){
-            $where[]=['route_url','like','%'.$params['url'].'%'];
-        }
-        $filed=['id','name','code','route_url','icon','description','parent_id'];
+        $filed=['id','name','balance','revenue','logo','contact_phone','status','created_at','updated_at'];
         $service=new BaseService('admin_merchant');
-        $data=$service->getList($where,$filed);
-        //如果不为空则进行树形结构返回
-        if(!empty($data)){
-            $data=buildTree($data);
-        }
+        $data=$service->getListWithPage($where,$filed,'id','desc',$request->page(),$request->pageSize());
         return success($data) ;
     }
 
@@ -40,9 +41,14 @@ class AdminMerchantController
     {
         $params=$request->all();
         BaseValidate::validate($params,'info');
-        $filed=['id','name','icon','parent_id','description','status'];
+        $filed=['*'];
         $service=new BaseService('admin_merchant');
         $data=$service->getInfo(['id'=>$params['id']],$filed);
+        $data['admin_user_name']='';
+        if(!empty($data)){
+            $adminUserModel= BaseModel::make('admin_user');
+            $data['admin_user_name']=$adminUserModel->where(['id'=>$data['admin_user_id']])->value('username');
+        }
         return success($data) ;
     }
 
@@ -54,7 +60,7 @@ class AdminMerchantController
     public function createOperation(Request $request):response
     {
         $params=$request->post();
-        SystemPermissionValidate::validate($params,'add');
+        MerchantValidate::validate($params,'add');
         $service=new BaseService('admin_merchant');
         if($service->add($params))  {
             return success() ;
@@ -71,7 +77,7 @@ class AdminMerchantController
     {
         $params=$request->post();
         $params['updated_at']=date('Y-m-d H:i:s',time());
-        SystemPermissionValidate::validate($params,'edit');
+        MerchantValidate::validate($params,'edit');
         $service=new BaseService('admin_merchant');
         if($service->edit(['id'=>$params['id']],$params))  {
             return success() ;
@@ -88,12 +94,8 @@ class AdminMerchantController
     {
         $params=$request->all();
         BaseValidate::validate($params,'info');
-        $service=new SystemPermissionService();
-        $idArray=explode(',',$params['id']);
-        $res=$service->del($idArray);
-        if($res===true)  {
-            return success() ;
-        }
+        $service=new BaseService('admin_merchant');
+        $res=$service->edit(['id'=>$params['id']],['is_delete'=>1,'updated_at'=>date('Y-m-d H:i:s',time())]);
         return error($res) ;
     }
 }

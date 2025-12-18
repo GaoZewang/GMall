@@ -39,6 +39,7 @@ Route::group('', function () {
     });
 
 })->middleware([
+    app\middleware\BaseMiddleware::class ,
     app\middleware\JwtAuthMiddleware::class,
     app\middleware\AdminJwtMiddleware::class,
 ]);

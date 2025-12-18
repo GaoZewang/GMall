@@ -13,6 +13,7 @@ Route::group('', function () {
     Route::post('/changeBalance', [app\admin\controller\UserController::class, 'changeBalance']);
     Route::post('/resetPassword', [app\admin\controller\UserController::class, 'resetPassword']);
 })->middleware([
+    app\middleware\BaseMiddleware::class,
     app\middleware\JwtAuthMiddleware::class,
     app\middleware\AdminJwtMiddleware::class,
 ]);
