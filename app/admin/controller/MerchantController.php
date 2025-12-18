@@ -8,7 +8,7 @@ use app\model\BaseModel;
 use app\service\BaseService;
 use app\validate\BaseValidate;
 use app\admin\validate\MerchantValidate;
-class AdminMerchantController
+class MerchantController
 {
     /**
      * 商户列表
