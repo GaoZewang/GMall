@@ -9,11 +9,9 @@ use Webman\Route;
 Route::group('',function (){
     Route::get('/list',    [app\admin\controller\AdminMerchantController::class, 'getList']);
     Route::get('/info',    [app\admin\controller\AdminMerchantController::class, 'getInfo']);
-//    Route::get('/delete',  [app\admin\controller\AdminMerchantController::class, 'deleteOption']);
+    Route::get('/delete',  [app\admin\controller\AdminMerchantController::class, 'delOperation']);
     Route::post('/create', [app\admin\controller\AdminMerchantController::class, 'createOperation']);
-//    Route::post('/update', [app\admin\controller\AdminMerchantController::class, 'updateOperation']);
-//    Route::post('/status', [app\admin\controller\AdminMerchantController::class, 'updateGoodsStatus']);
-
+    Route::post('/update', [app\admin\controller\AdminMerchantController::class, 'updateOperation']);
 })->middleware([
     app\middleware\BaseMiddleware::class,
     app\middleware\JwtAuthMiddleware::class,

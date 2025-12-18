@@ -21,18 +21,18 @@ class MerchantValidate
     {
         $scenes=[
             'add'=>[
-                'admin_user_id' => Validator::stringType()->notEmpty()->setName('管理员用户ID'),
+                'admin_user_id' => Validator::intVal()->positive()->notEmpty()->setName('管理员用户ID'),
                 'name' => Validator::notEmpty()->setName('商户名称'),
                 'logo' => Validator::notEmpty()->setName('商户logo'),
-                'address' => Validator::intVal()->positive()->setName('商户地址'),
+                'address' => Validator::notEmpty()->setName('商户地址'),
                 'contact_phone' => Validator::notEmpty()->setName('商户联系电话'),
             ],
             'edit'=>[
-                'id' => Validator::intVal()->positive()->setName('ID'),
-                'admin_user_id' => Validator::stringType()->notEmpty()->setName('管理员用户ID'),
+                'id' => Validator::intVal()->positive()->notEmpty()->setName('ID'),
+                'admin_user_id' => Validator::intVal()->positive()->notEmpty()->setName('管理员用户ID'),
                 'name' => Validator::notEmpty()->setName('商户名称'),
                 'logo' => Validator::notEmpty()->setName('商户logo'),
-                'address' => Validator::intVal()->positive()->setName('商户地址'),
+                'address' => Validator::notEmpty()->setName('商户地址'),
                 'contact_phone' => Validator::notEmpty()->setName('商户联系电话'),
             ],
             'status'=>[

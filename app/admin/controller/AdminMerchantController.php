@@ -2,15 +2,12 @@
 
 namespace app\admin\controller;
 
-use app\admin\service\SystemPermissionService;
-use app\admin\validate\MerchantValidate;
-use app\admin\validate\SystemPermissionValidate;
+use support\Request;
+use support\Response;
 use app\model\BaseModel;
 use app\service\BaseService;
 use app\validate\BaseValidate;
-use support\Request;
-use support\Response;
-
+use app\admin\validate\MerchantValidate;
 class AdminMerchantController
 {
     /**
@@ -60,6 +57,12 @@ class AdminMerchantController
     public function createOperation(Request $request):response
     {
         $params=$request->post();
+        if(isset($params['balance'])){
+            unset($params['balance']);
+        }
+        if(isset($params['revenue'])){
+            unset($params['revenue']);
+        }
         MerchantValidate::validate($params,'add');
         $service=new BaseService('admin_merchant');
         if($service->add($params))  {
@@ -76,6 +79,12 @@ class AdminMerchantController
     public function updateOperation(Request $request):response
     {
         $params=$request->post();
+        if(isset($params['balance'])){
+            unset($params['balance']);
+        }
+        if(isset($params['revenue'])){
+            unset($params['revenue']);
+        }
         $params['updated_at']=date('Y-m-d H:i:s',time());
         MerchantValidate::validate($params,'edit');
         $service=new BaseService('admin_merchant');
