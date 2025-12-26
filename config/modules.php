@@ -5,7 +5,9 @@ return [
     'admin' => [
         'prefix'     => '/admin',                      // 路由前缀
         'route_path' => base_path() . '/app/admin/route',
-        'middleware' => [],
+        'middleware' => [
+            app\middleware\CorsMiddleware::class
+        ],
     ],
     'api' => [
         'prefix'     => '/api',

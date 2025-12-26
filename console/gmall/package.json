@@ -1,0 +1,30 @@
+{
+  "name": "gmall",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:admin": "cross-env VITE_PLATFORM=admin vite --port 5173",
+    "dev:merchant": "cross-env VITE_PLATFORM=merchant vite --port 5174",
+    "dev:store": "cross-env VITE_PLATFORM=store vite --port 5175",
+    "build:admin": "cross-env VITE_PLATFORM=admin vite build --mode admin",
+    "build:merchant": "cross-env VITE_PLATFORM=merchant vite build --mode merchant",
+    "build:store": "cross-env VITE_PLATFORM=store vite build --mode store"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "element-plus": "^2.13.0",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.24",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/tsconfig": "^0.8.1",
+    "cross-env": "^10.1.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4",
+    "vue-tsc": "^3.1.4"
+  }
+}

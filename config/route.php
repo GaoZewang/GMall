@@ -2,6 +2,9 @@
 
 use Webman\Route;
 
+//Route::options('/{path:.+}', function () {
+//    return response('', 204);
+//});
 // 读取模块配置
 $modules = config('modules');
 

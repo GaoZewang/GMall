@@ -1,0 +1,15 @@
+:root{
+  --el-color-primary:#FF6700;
+  --bg:#F7F8FA;
+  --card:#FFFFFF;
+  --text:#1F1F1F;
+  --sub:#6B7280;
+  --line:#EDEFF2;
+}
+
+html,body,#app{height:100%;}
+body{margin:0;background:var(--bg);color:var(--text);}
+
+.el-card{border-radius:16px;border:1px solid var(--line);}
+.el-button{border-radius:10px;}
+.el-input__wrapper{border-radius:10px;}

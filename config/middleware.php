@@ -13,6 +13,9 @@
  */
 
 return [
+    ''=>[
+        app\middleware\CorsMiddleware::class
+    ],
     'admin'=>[
     ],
     'merchant'=>[
