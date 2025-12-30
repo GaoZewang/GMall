@@ -35,7 +35,7 @@ class UserController
         }
         BaseValidate::validate($params,'list');
         $service=new BaseService('user');
-        $data= $service->getListWithPage($where,['*'],'id','desc',$params['page'],$params['page_size']);
+        $data= $service->getListWithPage($where,['*'],'id','desc',$params['page'],$params['per_page']);
         return success($data);
     }
 

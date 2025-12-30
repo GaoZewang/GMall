@@ -26,6 +26,6 @@ class Request extends \Webman\Http\Request
     }
     public function pageSize(): int
     {
-        return (int)$this->get('page_size', 10);
+        return (int)$this->get('per_page', 10);
     }
 }

@@ -21,7 +21,7 @@ class GoodsValidate
     {
         $scenes=[
             'add'=>[
-                'merchant_id' => Validator::stringType()->notEmpty()->setName('商户ID'),
+                'merchant_id' => Validator::intVal()->positive()->notEmpty()->setName('商户ID'),
                 'goods_name' => Validator::notEmpty()->setName('商品名称'),
                 'subtitle' => Validator::notEmpty()->setName('副标题'),
                 'category_id' => Validator::intVal()->positive()->setName('类目ID'),
@@ -33,7 +33,7 @@ class GoodsValidate
             ],
             'edit'=>[
                 'id' => Validator::intVal()->positive()->setName('ID'),
-                'merchant_id' => Validator::stringType()->notEmpty()->setName('商户ID'),
+                'merchant_id' => Validator::intVal()->positive()->notEmpty()->setName('商户ID'),
                 'goods_name' => Validator::notEmpty()->setName('商品名称'),
                 'subtitle' => Validator::notEmpty()->setName('副标题'),
                 'category_id' => Validator::notEmpty()->setName('类目ID'),
@@ -45,7 +45,7 @@ class GoodsValidate
             ],
             'status'=>[
                 'id' => Validator::intVal()->positive()->setName('ID'),
-                'goods_status' => Validator::intVal()->in([0,1])->setName('Status'),
+                'goods_status' => Validator::in([0,1])->setName('Status'),
             ],
         ];
         Validator::input($data, $scenes[$scene]);

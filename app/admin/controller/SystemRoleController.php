@@ -22,7 +22,7 @@ class SystemRoleController
         $service=new BaseService('system_role');
         $data=$service->getListWithPage(
             ['is_delete'=>0],$filed,'id','desc',
-            $params['page'],$params['page_size']
+            $params['page'],$params['per_page']
         );
         return success($data) ;
     }

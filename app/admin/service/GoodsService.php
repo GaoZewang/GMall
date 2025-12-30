@@ -73,7 +73,7 @@ class GoodsService
             $skuModel=BaseModel::make('goods_sku');
             $goodsData=[
                 'merchant_id'    => $merchantId,
-                'goods_name'     => $data['name'],
+                'goods_name'     => $data['goods_name'],
                 'subtitle'       => $data['subtitle'] ?? null,
                 'category_id'    => $data['category_id'],
                 'cover_image'    => $data['cover_image'] ?? null,
@@ -136,7 +136,7 @@ class GoodsService
             $skuModel=BaseModel::make('goods_sku');
             $goodsData=[
                 'merchant_id'    => $merchantId,
-                'goods_name'     => $data['name'],
+                'goods_name'     => $data['goods_name'],
                 'subtitle'       => $data['subtitle'] ?? null,
                 'category_id'    => $data['category_id'],
                 'cover_image'    => $data['cover_image'] ?? null,

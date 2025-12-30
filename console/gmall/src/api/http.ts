@@ -48,6 +48,15 @@ http.interceptors.response.use(
     }
 
     // 业务失败（非200）
+    // 如果是登录失效相关的code，执行与401/403相同的处理
+    if ([401011, 401012, 401013, 401014, 401015].includes(body.code)) {
+      const auth = useAuthStore()
+      auth.logout()
+      if (router.currentRoute.value.path !== '/login') router.push('/login')
+      ElMessage.error('登录已失效，请重新登录')
+      return Promise.reject(new Error('登录已失效，请重新登录'))
+    }
+
     const msg = body.msg || '操作失败'
     ElMessage.error(msg)
     return Promise.reject(new Error(msg))
@@ -57,7 +66,7 @@ http.interceptors.response.use(
     const status = err?.response?.status
 
     // 如果后端使用 HTTP 401/403 表示未登录/无权限
-    if (status === 401) {
+    if ([401011, 401012, 401013, 401014, 401015].includes(status) || status === 403) {
       auth.logout()
       if (router.currentRoute.value.path !== '/login') router.push('/login')
       ElMessage.error('登录已失效，请重新登录')

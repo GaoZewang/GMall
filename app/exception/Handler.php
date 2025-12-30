@@ -63,7 +63,7 @@ class Handler implements ExceptionHandlerInterface
         if ($exception instanceof QueryException || $exception instanceof PDOException) {
             $debug = config('app.debug', false);
             return json([
-                'code' => 500,
+                'code' => 5001,
                 'msg'  => $debug
                     ? $exception->getCode() . ': ' . $exception->getMessage()
                     : '数据库服务异常，请稍后再试',
@@ -72,16 +72,20 @@ class Handler implements ExceptionHandlerInterface
 
         // 1. 统一处理 JWT 异常（如果没在中间件里处理）
         if ($exception instanceof JwtTokenException) {
+            echo 111;
             return json([
                 'code' => $exception->getCode() ?: 401011,
+//                'code' => 401,
                 'msg'  => $exception->getMessage(),
             ]);
         }
 
         //刷新token时异常
         if ($exception instanceof JwtRefreshTokenExpiredException) {
+            echo 111;
             return json([
-                'code' => $exception->getCode() ?: 401012,
+//                'code' => $exception->getCode() ?: 401012,
+                'code' => 401,
                 'msg'  => $exception->getMessage(),
             ]);
         }
@@ -92,7 +96,7 @@ class Handler implements ExceptionHandlerInterface
         if ($debug) {
             // 调试模式：把详细信息返回出来
             return json([
-                'code'  => 500,
+                'code'  => $exception->getCode(),
                 'msg'   => $exception->getMessage(),
                 'file'  => $exception->getFile(),
                 'line'  => $exception->getLine(),

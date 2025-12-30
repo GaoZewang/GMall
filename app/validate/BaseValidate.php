@@ -17,7 +17,7 @@ class BaseValidate
         $scenes=[
             'list'=>[
                 'page'      => v::intVal()->min(1)->setName('页码'),
-                'page_size' => v::intVal()->positive()->setName('每页条数'),
+                'per_page' => v::intVal()->positive()->setName('每页条数'),
             ],
             'info'=>[
                 'id' => v::intVal()->positive()->setName('数据主键'),

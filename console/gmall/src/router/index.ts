@@ -3,32 +3,30 @@ import Login from '../pages/Login.vue'
 import Layout from '../layouts/Layout.vue'
 import Dashboard from '../pages/Dashboard.vue'
 import Goods from '../pages/goods/Goods.vue'
+import GoodsInfo from '../pages/goods/GoodsInfo.vue'
 import Orders from '../pages/order/Orders.vue'
 import Users from '../pages/user/Users.vue'
-import Merchant from '../pages/merchant/merchant.vue'
+import Merchant from '../pages/merchant/Merchant.vue'
 import System from '../pages/System.vue'
 import Stores from '../pages/stores/Stores.vue'
 import { useAuthStore } from '../stores/auth'
+import GoodsCreate from '../pages/goods/GoodsCreate.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    {
-      path: '/login',
-      component: Login,
-      meta: { title: '登录' },
-    },
-    {
-      path: '/',
-      component: Layout,
+    {path: '/login',component: Login,meta: { title: '登录' }},
+    {path: '/',component: Layout,
       children: [
         { path: '', component: Dashboard, meta: { title: '概览' } },
         { path: 'goods', component: Goods, meta: { title: '商品管理' } },
+        { path: 'goods/create', component: GoodsCreate, meta: { title: '新增商品' } },
+        { path: 'goods/:id', component: GoodsInfo, meta: { title: '商品详情' } },
+        
         { path: 'orders', component: Orders, meta: { title: '订单管理' } },
         { path: 'users', component: Users, meta: { title: '用户管理' } },
         { path: 'merchant', component: Merchant, meta: { title: '商户管理'}},
         { path: 'stores', component: Stores, meta: { title: '店铺管理' } },
         { path: 'system', component: System, meta: { title: '系统设置' } },
-     
       ],
     },
     // 兜底：其它路径都回首页（会被守卫拦到 login）

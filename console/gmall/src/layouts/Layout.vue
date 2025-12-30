@@ -21,7 +21,7 @@
     <el-container>
       <el-header class="header">
         <div class="left">
-          <div class="title">{{ pageTitle }}211</div>
+          <div class="title">{{ pageTitle }}</div>
         </div>
 
         <div class="right">

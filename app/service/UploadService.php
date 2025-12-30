@@ -68,18 +68,18 @@ class UploadService
                 ]);
 
             return [
-                'id'          => $exist->id,
-                'storage'     => $exist->storage,
-                'path'        => $exist->path,
+                //'id'          => $exist->id,
+                //'storage'     => $exist->storage,
+                //'path'        => $exist->path,
                 'url'         => $exist->url,
-                'hash'        => $exist->hash,
-                'size'        => $exist->size,
-                'mime_type'   => $exist->mime_type,
-                'width'       => $exist->width,
-                'height'      => $exist->height,
-                'scene'       => $exist->scene,
-                'ref_count'   => $exist->ref_count + 1,
-                'from_cache'  => true,
+                //'hash'        => $exist->hash,
+                //'size'        => $exist->size,
+                //'mime_type'   => $exist->mime_type,
+                //'width'       => $exist->width,
+                //'height'      => $exist->height,
+                //'scene'       => $exist->scene,
+                //'ref_count'   => $exist->ref_count + 1,
+                //'from_cache'  => true,
             ];
         }
 
@@ -129,18 +129,18 @@ class UploadService
         ]);
 
         return [
-            'id'          => $id,
-            'storage'     => $storage,
-            'path'        => $relativePath,
+            //'id'          => $id,
+            //'storage'     => $storage,
+            //'path'        => $relativePath,
             'url'         => $url,
-            'hash'        => $hash,
-            'size'        => $size,
-            'mime_type'   => $mimeType,
-            'width'       => $width,
-            'height'      => $height,
-            'scene'       => $scene,
-            'ref_count'   => 1,
-            'from_cache'  => false,
+            //'hash'        => $hash,
+            //'size'        => $size,
+            //'mime_type'   => $mimeType,
+            //'width'       => $width,
+            //'height'      => $height,
+            //'scene'       => $scene,
+            //'ref_count'   => 1,
+            //'from_cache'  => false,
         ];
     }
 

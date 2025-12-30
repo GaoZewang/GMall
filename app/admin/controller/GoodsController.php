@@ -27,6 +27,15 @@ class GoodsController
         $where=[];
         $params=$request->all();
         $where[]=['is_deleted','=',0];
+        if(!empty($params['goods_name'])){
+            $where[]=['goods_name','like',"%{$params['goods_name']}%"];
+        }
+        if(!empty($params['category_id'])){
+            $where[]=['category_id','=',$params['category_id']];
+        }
+        if(isset($params['goods_status'])&&in_array($params['goods_status'],[0,1])){
+            $where[]=['goods_status','=',$params['goods_status']];
+        }
         BaseValidate::validate($params,'list');
         $service=new BaseService('goods');
         $filed=['id','merchant_id','goods_name','subtitle','category_id','cover_image','goods_status'];
@@ -57,8 +66,10 @@ class GoodsController
     public function createOption(Request $request):Response
     {
         $goodService=new GoodsService;
-        GoodsValidate::validate($request->post(),'add');
-        $res= $goodService->createGoods(0,$request->post());
+        $params=$request->post();
+        $params['merchant_id']=1;
+        GoodsValidate::validate($params,'add');
+        $res= $goodService->createGoods($params['merchant_id'],$request->post());
         if($res){
             return success($res);
         }
@@ -88,7 +99,7 @@ class GoodsController
      */
     public function updateGoodsStatus(Request $request):Response
     {
-        $params=$request->get();
+        $params=$request->post();
         $goodsService=new BaseService('goods');
         GoodsValidate::validate($request->post(),'status');
         $res= $goodsService->edit(['id'=>$params['id']],['goods_status'=>$params['status']]);

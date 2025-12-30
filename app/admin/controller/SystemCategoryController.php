@@ -30,8 +30,8 @@ class SystemCategoryController
         }
         $service=new BaseService('system_category');
         $data=$service->getList($where);
-        if(!$data){
-            buildTree($data);
+        if(!empty($data)){
+            $data=buildTree($data);
         }
         return success($data);
     }
