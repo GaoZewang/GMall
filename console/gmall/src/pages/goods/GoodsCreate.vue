@@ -1,12 +1,9 @@
 <template>
   <div class="page">
     <el-card shadow="never">
-      <div class="head">
-        <div class="title">新增商品</div>
-        <div class="ops">
-          <el-button @click="back">返回</el-button>
-        </div>
-      </div>
+      <PageHeader :title="isEdit ? '编辑商品' : '新增商品'">
+        <el-button @click="back">返回</el-button>
+      </PageHeader>
 
       <el-form ref="formRef" :model="form" :rules="rules" label-width="96px" class="form">
         <!-- 基本信息 -->
@@ -256,22 +253,38 @@
 
     <!-- ✅ 底部居中保存按钮 -->
 <div class="submit-bar">
-<el-button type="primary" size="large" :loading="submitting" @click="submit">保存</el-button>
+  <el-button type="primary" size="large" :loading="submitting" @click="submit">保存</el-button>
     </div>
   </div>
+  
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, reactive, ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import type { FormInstance, FormRules, UploadRequestOptions } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { adminGoodsCreateApi } from '../../api/goods'
+import { adminGoodsCreateApi, adminGoodsInfoApi, adminGoodsUpdateApi } from '../../api/goods'
 import { adminUploadSingle } from '../../api/upload'
+import PageHeader from '../../components/PageHeader.vue'
 
 const router = useRouter()
+const route = useRoute()
 const formRef = ref<FormInstance>()
 const submitting = ref(false)
+const loading = ref(false)
+
+// 获取商品ID
+const goodsId = computed(() => {
+  const id = route.params.id
+  return id ? Number(id) : 0
+})
+
+// 判断是否为编辑模式
+const isEdit = computed(() => goodsId.value > 0)
+
+// 用于保存SKU的ID，在编辑模式下使用
+const skuIds = ref<Map<string, number>>(new Map())
 
 type CreateGoodsPayload2 = {
   goods_name: string
@@ -582,10 +595,119 @@ function buildPayload(): CreateGoodsPayload2 {
   }
 }
 
+// 加载商品详情
+async function loadGoodsInfo() {
+  if (!isEdit.value) return
+  
+  loading.value = true
+  try {
+    const res = await adminGoodsInfoApi(goodsId.value)
+    const data = res as any
+    
+    // 填充基本信息
+    form.goods_name = data.goods_name || ''
+    form.subtitle = data.subtitle || ''
+    form.category_id = data.category_id || 0
+    form.brand_id = data.brand_id || 0
+    form.cover_image = data.cover_image || ''
+    form.images = data.images || []
+    form.description = data.description || ''
+    
+    // 填充规格模板
+    specs.splice(0, specs.length)
+    if (data.attrs_template?.specs?.length) {
+      data.attrs_template.specs.forEach((spec: any) => {
+        specs.push({
+          key: spec.name || '',
+          values: spec.values || [],
+          codes: {}
+        })
+      })
+    }
+    
+    // 填充SKU列表
+    form.sku_list = []
+    if (data.sku?.length) {
+      data.sku.forEach((sku: any) => {
+        const __key = `${Date.now()}_${Math.random().toString(16).slice(2)}`
+        form.sku_list.push({
+          __key,
+          sku_code: sku.sku_code || '',
+          bar_code: sku.bar_code || '',
+          attrs: sku.attrs || {},
+          cost_price: Number(sku.cost_price || 0),
+          base_price: Number(sku.base_price || 0)
+        })
+        // 保存SKU的ID映射
+        if (sku.id) {
+          skuIds.value.set(__key, sku.id)
+        }
+      })
+    }
+  } catch (error) {
+    ElMessage.error('加载商品详情失败')
+    console.error('加载商品详情失败:', error)
+    router.push('/goods')
+  } finally {
+    loading.value = false
+  }
+}
+
+// 构建更新payload
+function buildUpdatePayload() {
+  const payload: any = buildPayload()
+  payload.id = goodsId.value
+  // 同时保留goods_name和good_name参数，确保与接口兼容
+  payload.good_name = payload.goods_name
+  
+  // 转换attrs_template格式
+  payload.attrs_template = {
+    specs: [],
+    attrs: {}
+  }
+  
+  // 添加规格
+  specs.forEach(s => {
+    const k = (s.key || '').trim()
+    const vals = cleanedValues(s.values)
+    if (k && vals.length) {
+      payload.attrs_template.specs.push({
+        name: k,
+        values: vals
+      })
+    }
+  })
+  
+  // 添加SKU ID
+  payload.sku_list = form.sku_list.map(s => {
+    const skuData = {
+      sku_code: (s.sku_code || '').trim(),
+      bar_code: (s.bar_code || '').trim(),
+      attrs: s.attrs || {},
+      cost_price: Number(s.cost_price || 0),
+      base_price: Number(s.base_price || 0)
+    }
+    
+    // 如果是编辑模式，添加SKU ID
+    const skuId = skuIds.value.get(s.__key)
+    if (skuId) {
+        ;(skuData as any).id = skuId
+    } 
+    return skuData
+  })
+  
+  return payload
+}
+
 async function submit() {
   await formRef.value?.validate()
 
-  const payload = buildPayload()
+  let payload: any
+  if (isEdit.value) {
+    payload = buildUpdatePayload()
+  } else {
+    payload = buildPayload()
+  }
 
   if (payload.sku_list.length === 0) {
     ElMessage.warning('请至少添加一个 SKU（或使用“一键生成 SKU”）')
@@ -593,7 +715,7 @@ async function submit() {
   }
 
   // 有规格时：补空 sku_code
-  if (Object.keys(payload.attrs_template).length > 0) {
+  if (payload.attrs_template?.specs?.length > 0 || Object.keys(payload.attrs_template || {}).length > 0) {
     form.sku_list.forEach(r => {
       if (!r.sku_code?.trim()) r.sku_code = buildSkuCodeFromAttrs(r.attrs || {})
     })
@@ -601,15 +723,28 @@ async function submit() {
 
   submitting.value = true
   try {
-    const res = await adminGoodsCreateApi(payload as any)
-    ElMessage.success('创建成功')
-    const id = res?.id
-    if (id) router.push(`/goods/${id}`)
-    else router.push('/goods')
+    if (isEdit.value) {
+      await adminGoodsUpdateApi(payload)
+      ElMessage.success('更新成功')
+      router.push(`/goods/${goodsId.value}`)
+    } else {
+      const res = await adminGoodsCreateApi(payload as any)
+      ElMessage.success('创建成功')
+      const id = res?.id
+      if (id) router.push(`/goods/${id}`)
+      else router.push('/goods')
+    }
   } finally {
     submitting.value = false
   }
 }
+
+// 组件挂载时，如果是编辑模式则加载商品详情
+onMounted(() => {
+  if (isEdit.value) {
+    loadGoodsInfo()
+  }
+})
 
 function back() {
   router.back()
@@ -618,9 +753,7 @@ function back() {
 
 <style scoped>
 .page{display:flex;flex-direction:column;gap:12px;padding-bottom:88px;} /* 预留右下角保存按钮空间 */
-.head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
-.title{font-weight:900;}
-.ops{display:flex;gap:10px;align-items:center;}
+
 
 .form{margin-top:12px;}
 .sectionTitle{font-weight:900;margin:10px 0;}

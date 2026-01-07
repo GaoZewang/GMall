@@ -20,7 +20,7 @@ class MerchantController
         $params=$request->all();
         BaseValidate::validate($params,'list');
         $where[]=['is_delete','=',0];
-        if($params['name']){
+        if(!empty($params['name'])){
             $where[]=['name','like','%'.$params['name'].'%'];
         }
         $filed=['id','name','balance','revenue','logo','contact_phone','status','created_at','updated_at'];
@@ -105,6 +105,9 @@ class MerchantController
         BaseValidate::validate($params,'info');
         $service=new BaseService('admin_merchant');
         $res=$service->edit(['id'=>$params['id']],['is_delete'=>1,'updated_at'=>date('Y-m-d H:i:s',time())]);
-        return error($res) ;
+        if($res){
+            return success() ;
+        }
+        return error() ;
     }
 }

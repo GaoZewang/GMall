@@ -84,8 +84,10 @@ class GoodsController
     public function updateOption(Request $request):Response
     {
         $goodService=new GoodsService;
-        GoodsValidate::validate($request->post(),'edit');
-        $res= $goodService->updateGoods(0,$request->post());
+        $params=$request->post();
+        $params['merchant_id']=1;
+        GoodsValidate::validate($params,'edit');
+        $res= $goodService->updateGoods($params['merchant_id'],$request->post());
         if($res){
             return success();
         }

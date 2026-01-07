@@ -3,10 +3,12 @@ import type { MenuItem } from './types'
 export const adminMenus: MenuItem[] = [
   { title: '概览', path: '/' },
   { title: '商品管理', path: '/goods' },
+  { title: '商户管理', path: '/merchant' },
+  { title: '店铺管理', path: '/shop' },
+  { title: '分类管理', path: '/category' },
   { title: '订单管理', path: '/orders' },
   { title: '用户管理', path: '/users' },
   { title: '系统设置', path: '/system' },
-  { title: '商户管理', path: '/merchant' },
 ]
 
 export default adminMenus

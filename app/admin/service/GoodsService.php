@@ -124,6 +124,7 @@ class GoodsService
     public  function updateGoods(int $merchantId, array $data): int
     {
         $goodsId=$data['id'];
+        echo $goodsId;
         // 2. 处理 JSON 字段
         $images        = $this->encodeJsonField($data, 'images');
         $attrsTemplate = $this->encodeJsonField($data, 'attrs_template');
@@ -154,7 +155,7 @@ class GoodsService
             $oldSkuList = $skuModel->where(['goods_id'=>$goodsId,'merchant_id'=>$merchantId])->get();
             $oldSkuMap = [];
             foreach ($oldSkuList as $row) {
-                $oldSkuMap[(int)$row['id']] = $row;
+                $oldSkuMap[(int)$row['id']] = $row['id'];
             }
             $touchedSkuIds = []; // 这次仍然保留/更新的SKU ID
 

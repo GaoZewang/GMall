@@ -1,4 +1,4 @@
-import { http } from '../api/http'
+import { http } from './http'
 
 type UploadResp = {
   url: string // 这里对应后端 data.url

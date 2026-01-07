@@ -1,4 +1,4 @@
-import { http } from '../api/http'
+import { http } from './http'
 
 export type GoodsItem = {
   id: number
@@ -97,6 +97,42 @@ export function adminGoodsStatusApi(params: { id: number; status: number }) {
 //   return http.get('/admin/goods/status', { params }) as Promise<true>
   // 如果是 POST：
   return http.post('/admin/goods/status', params) as Promise<true>
+}
+
+/** 删除商品：GET /admin/goods/delete */
+export function adminGoodsDeleteApi(params: { id: number }) {
+  return http.get('/admin/goods/delete', { params }) as Promise<true>
+}
+
+/**
+ * 编辑商品：POST /admin/goods/update
+ */
+export type UpdateGoodsPayload = {
+  id: number
+  goods_name: string
+  good_name?: string
+  subtitle: string
+  category_id: number
+  brand_id: number
+  cover_image: string
+  images: string[]
+  description: string
+  attrs_template: {
+    specs: Array<{ name: string; values: string[] }>
+    attrs: Record<string, string>
+  }
+  sku_list: Array<{
+    id?: number
+    sku_code: string
+    bar_code: string
+    attrs: Record<string, string>
+    cost_price: number
+    base_price: number
+  }>
+}
+
+export function adminGoodsUpdateApi(payload: UpdateGoodsPayload) {
+  return http.post('/admin/goods/update', payload) as Promise<true | any>
 }
 
 

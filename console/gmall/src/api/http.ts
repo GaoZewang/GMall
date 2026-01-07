@@ -17,7 +17,7 @@ function getHttpErrorMessage(err: any): string {
 }
 
 export const http = axios.create({
-  baseURL:'http://127.0.0.1:8787',
+  baseURL: (import.meta as any).env.VITE_API_BASE_URL,
   timeout: 15000,
   headers: { 'Content-Type': 'application/json' },
 })

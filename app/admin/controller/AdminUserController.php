@@ -47,7 +47,6 @@ class AdminUserController
      */
     public function login(Request $request,AuthService $authService):Response
     {
-        print_r($request->post());
         $username=$request->post('username');
         $password=$request->post('password');
         $platform=$request->post('platform');

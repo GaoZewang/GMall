@@ -1,26 +1,25 @@
 <template>
   <div class="page">
     <el-card shadow="never">
-      <!-- 搜索栏（不变） -->
-      <div class="toolbar">
-        <el-input
-          v-model="query.goods_name"
-          placeholder="搜索商品名称"
-          clearable
-          style="max-width: 320px"
-          @keyup.enter="load(1)"
-        />
-        <el-select v-model="query.goods_status" placeholder="状态" clearable style="width: 140px">
-          <el-option label="上架" :value="1" />
-          <el-option label="下架" :value="0" />
-        </el-select>
-
-        <div class="spacer" />
-        <el-button @click="reset">重置</el-button>
-        <el-button type="primary" :loading="loading" @click="load(1)">查询</el-button>
-        <el-button type="primary" @click="router.push('/goods/create')">新增商品</el-button>
-
-      </div>
+      <!-- 搜索栏（使用组件） -->
+      <SearchToolbar :loading="loading" @reset="reset" @query="handleQuery">
+        <template #search>
+          <el-input
+            v-model="query.goods_name"
+            placeholder="搜索商品名称"
+            clearable
+            style="max-width: 320px"
+            @keyup.enter="load(1)"
+          />
+          <el-select v-model="query.goods_status" placeholder="状态" clearable style="width: 140px">
+            <el-option label="上架" :value="1" />
+            <el-option label="下架" :value="0" />
+          </el-select>
+        </template>
+        <template #actions>
+          <el-button type="primary" @click="router.push('/goods/create')">新增商品</el-button>
+        </template>
+      </SearchToolbar>
 
       <el-table :data="rows" v-loading="loading" class="table" row-key="id">
         <el-table-column label="ID" prop="id" width="80" />
@@ -37,18 +36,30 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="商品信息" min-width="320">
+        <el-table-column label="商品信息" min-width="180">
           <template #default="{ row }">
             <div class="gname">{{ row.goods_name }}</div>
             <div class="gsub">{{ row.subtitle }}</div>
           </template>
         </el-table-column>
 
-        <el-table-column label="商户ID" prop="merchant_id" width="110" />
-        <el-table-column label="类目ID" prop="category_id" width="110" />
+        <el-table-column label="现有库存" min-width="80">
+            <template #default="{ row }">
+              <div class="">10</div>
+            </template>
+        </el-table-column>
+
+        <el-table-column label="累计销量" min-width="80">
+            <template #default="{ row }">
+              <div class="">100</div>
+            </template>
+        </el-table-column>
+        
+        <!-- <el-table-column label="商户ID" prop="merchant_id" width="110" /> -->
+        <!-- <el-table-column label="类目ID" prop="category_id" width="110" value="10"/> -->
 
         <!-- ✅ 状态：Switch -->
-        <el-table-column label="状态" width="140">
+        <el-table-column label="状态" width="150">
           <template #default="{ row }">
             <div class="statusWrap">
               <el-switch
@@ -63,10 +74,11 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" width="160" fixed="right">
+        <el-table-column label="操作" width="150" fixed="right">
           <template #default="{ row }">
             <el-button link type="primary" @click="onView(row)">查看</el-button>
             <el-button link @click="onEdit(row)">编辑</el-button>
+            <el-button link type="danger" @click="onDelete(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -92,7 +104,8 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { adminGoodsListApi, adminGoodsStatusApi, type GoodsItem } from '../../api/goods'
+import { adminGoodsListApi, adminGoodsStatusApi, adminGoodsDeleteApi, type GoodsItem } from '../../api/goods'
+import SearchToolbar from '../../components/SearchToolbar.vue'
 
 const router = useRouter()
 
@@ -150,6 +163,10 @@ function reset() {
   load(1)
 }
 
+function handleQuery() {
+  load(1)
+}
+
 async function onChangeStatus(row: GoodsItem, nextStatus: number) {
   const prev = row.goods_status
 
@@ -189,7 +206,36 @@ function onView(row: GoodsItem) {
 }
 
 function onEdit(row: GoodsItem) {
-  ElMessage.info(`编辑商品：${row.id}（后续接编辑页）`)
+  router.push(`/goods/edit/${row.id}`)
+}
+
+async function onDelete(row: GoodsItem) {
+  try {
+    await ElMessageBox.confirm(
+      `确认删除商品「${row.goods_name}」？`,
+      '确认操作',
+      { type: 'warning', confirmButtonText: '确认', cancelButtonText: '取消' }
+    )
+    
+    loading.value = true
+    await adminGoodsDeleteApi({ id: row.id })
+    
+    // 从列表中移除该商品
+    const index = rows.value.findIndex(item => item.id === row.id)
+    if (index > -1) {
+      rows.value.splice(index, 1)
+      pagination.total--
+    }
+    
+    ElMessage.success('删除成功')
+  } catch (error) {
+    if (error !== 'cancel') {
+      ElMessage.error('删除失败')
+      console.error('删除商品失败:', error)
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 onMounted(() => load(1))
@@ -197,8 +243,6 @@ onMounted(() => load(1))
 
 <style scoped>
 .page{display:flex;flex-direction:column;gap:12px;}
-.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
-.spacer{flex:1;}
 .table{width:100%;}
 .gname{font-weight:900;}
 .gsub{margin-top:4px;color:var(--sub);font-size:12px;line-height:1.2;}

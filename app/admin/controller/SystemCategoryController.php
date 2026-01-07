@@ -29,7 +29,8 @@ class SystemCategoryController
             $where[]=['category_name','like',"%{$params['category_name']}%"];
         }
         $service=new BaseService('system_category');
-        $data=$service->getList($where);
+        $filed=['id','parent_id','category_name','category_status'];
+        $data=$service->getList($where,$filed,'id','desc');
         if(!empty($data)){
             $data=buildTree($data);
         }

@@ -8,3 +8,6 @@
 /tests/tmp
 /tests/.phpunit.result.cache
 /public/upload
+/console/gmall/.env
+/console/gmall/.env.development
+/console/gmall/.env.production
