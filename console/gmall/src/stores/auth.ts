@@ -9,15 +9,20 @@ export type AdminUser = {
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('gmall_token') || '',
+    refreshToken: localStorage.getItem('gmall_refresh_token') || '',
     platform: (localStorage.getItem('gmall_platform') as Platform) || PLATFORM,
     user: (localStorage.getItem('gmall_user')
       ? (JSON.parse(localStorage.getItem('gmall_user') as string) as AdminUser)
       : null) as AdminUser | null,
   }),
   actions: {
-    setToken(token) {
+    setToken(token, refreshToken?) {
       this.token = token
       localStorage.setItem('gmall_token', token)
+      if (refreshToken) {
+        this.refreshToken = refreshToken
+        localStorage.setItem('gmall_refresh_token', refreshToken)
+      }
     },
     setPlatform(p: Platform) {
       this.platform = p
@@ -30,8 +35,10 @@ export const useAuthStore = defineStore('auth', {
     },
     logout() {
       this.token = ''
+      this.refreshToken = ''
       this.user = null
       localStorage.removeItem('gmall_token')
+      localStorage.removeItem('gmall_refresh_token')
       localStorage.removeItem('gmall_user')
     },
   },

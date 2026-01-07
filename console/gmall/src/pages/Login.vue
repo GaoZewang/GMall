@@ -70,8 +70,8 @@ async function onSubmit() {
       password: form.password, 
       platform: PLATFORM 
     })
-    let token =  res.access_token
-    auth.setToken(token)
+    // 保存 access_token 和 refresh_token
+    auth.setToken(res.access_token, res.refresh_token)
     router.push('/')
   } catch {
     loading.value = false
