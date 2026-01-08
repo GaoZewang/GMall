@@ -64,9 +64,9 @@ export function getSystemSettingInfoApi(params: {
 // 更新系统配置
 export function updateSystemSettingApi(params: {
   id: number
-  tag: string
-  name: string
-  content: string
+  set_tag: string
+  set_name: string
+  set_content: string
 }): Promise<BaseResponse['data']> {
   return http.post('/admin/setting/update', params)
 }

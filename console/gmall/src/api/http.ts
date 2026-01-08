@@ -31,7 +31,8 @@ export const http = axios.create({
 // 请求：带 token
 http.interceptors.request.use((config) => {
   const auth = useAuthStore()
-  if (auth.token) {
+  // 刷新token请求不添加access token，避免与refresh token冲突
+  if (auth.token && !config.url?.includes('/refresh')) {
     config.headers = config.headers
     config.headers.Authorization = `Bearer ${auth.token}`
   }
@@ -106,8 +107,8 @@ async function refreshTokenAndRetry(config: any) {
   
   try {
     isRefreshing = true
-    // 调用刷新 token API
-    const res = await refreshTokenApi({ refresh_token: auth.refreshToken })
+    // 调用刷新 token API，使用refreshToken作为认证凭据
+    const res = await refreshTokenApi(auth.refreshToken)
     
     // 更新 token
     auth.setToken(res.access_token, res.refresh_token)

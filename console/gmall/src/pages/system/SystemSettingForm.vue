@@ -110,9 +110,9 @@ async function handleSave() {
     // 调用API更新配置
     await updateSystemSettingApi({
       id: props.setting.id,
-      tag: props.setting.set_tag,
-      name: props.setting.set_name,
-      content: JSON.stringify(content)
+      set_tag: props.setting.set_tag,
+      set_name: props.setting.set_name,
+      set_content: JSON.stringify(content)
     })
     
     ElMessage.success('配置保存成功')
@@ -150,6 +150,25 @@ onMounted(() => {
 
 .settings-form {
   margin-top: 20px;
+}
+
+/* 优化输入框长度，使其更美观 */
+.settings-form :deep(.el-textarea__wrapper) {
+  max-width: 600px;
+  width: 100%;
+}
+
+/* 优化文本域样式 */
+.settings-form :deep(.el-textarea) {
+  /* 确保文本域有合适的最小高度 */
+  min-height: 200px;
+}
+
+.settings-form :deep(.el-textarea__inner) {
+  /* 优化文本域内边距 */
+  padding: 10px 12px;
+  /* 确保文本域可以垂直扩展 */
+  resize: vertical;
 }
 
 .v2-sub-title {

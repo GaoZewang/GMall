@@ -76,32 +76,59 @@
 
       <!-- 文件上传 -->
       <el-form-item :label="item.label" v-else-if="item.type === 'upload'">
-        <el-upload
-          class="logo-uploader"
-          :limit="item.limit"
-          :accept="item.accept"
-          :file-list="fileLists[item.field] || []"
-          :on-success="(file) => handleUploadSuccess(file, item.field)"
-          :on-remove="() => handleUploadRemove(item.field)"
-          :before-upload="beforeUpload"
-          :http-request="(options) => handleUploadRequest(options, item.field)"
-          action="#"
-          :auto-upload="true"
-        >
-          <el-button type="primary">点击上传</el-button>
-          <template #tip>
-            <div class="el-upload__tip">仅支持{{ item.accept.replace(/\./g, '').replace(/,/g, '、') }}格式文件</div>
-          </template>
-        </el-upload>
-        <div v-if="formData[item.field]" class="cert-preview">
-          <el-tag size="small">已上传</el-tag>
-          <!-- 如果是图片，可以显示预览 -->
+        <!-- 图片类型的上传组件（使用垂直布局） -->
+        <div v-if="item.field === 'siteLogo'" class="logo-uploader">
+          <!-- 图片预览（位于上传按钮上方） -->
           <el-image
-            v-if="item.field === 'siteLogo' && formData[item.field]"
+            v-if="formData[item.field]"
             :src="formData[item.field]"
-            fit="cover"
-            style="width: 200px; height: 60px; border-radius: 4px; margin-top: 8px;"
+            fit="contain"
+            style="width: 100px; height: 100px; border: 1px solid #e4e7ed; border-radius: 4px; padding: 8px; background-color: #fafafa;"
           />
+          
+          <!-- 上传按钮（位于图片预览下方） -->
+          <el-upload
+            :limit="item.limit"
+            :accept="item.accept"
+            :file-list="fileLists[item.field] || []"
+            :on-success="(file) => handleUploadSuccess(file, item.field)"
+            :on-remove="() => handleUploadRemove(item.field)"
+            :before-upload="beforeUpload"
+            :http-request="(options) => handleUploadRequest(options, item.field)"
+            action="#"
+            :auto-upload="true"
+          >
+            <el-button type="primary">点击上传</el-button>
+            <template #tip>
+              <div class="el-upload__tip">仅支持{{ item.accept.replace(/\./g, '').replace(/,/g, '、') }}格式文件</div>
+            </template>
+          </el-upload>
+        </div>
+        
+        <!-- 非图片类型的文件上传组件 -->
+        <div v-else class="standard-uploader">
+          <!-- 非图片类型的文件上传预览 -->
+          <div v-if="formData[item.field]" style="margin-bottom: 8px;">
+            <el-tag size="small">已上传</el-tag>
+          </div>
+          
+          <!-- 上传按钮 -->
+          <el-upload
+            :limit="item.limit"
+            :accept="item.accept"
+            :file-list="fileLists[item.field] || []"
+            :on-success="(file) => handleUploadSuccess(file, item.field)"
+            :on-remove="() => handleUploadRemove(item.field)"
+            :before-upload="beforeUpload"
+            :http-request="(options) => handleUploadRequest(options, item.field)"
+            action="#"
+            :auto-upload="true"
+          >
+            <el-button type="primary">点击上传</el-button>
+            <template #tip>
+              <div class="el-upload__tip">仅支持{{ item.accept.replace(/\./g, '').replace(/,/g, '、') }}格式文件</div>
+            </template>
+          </el-upload>
         </div>
       </el-form-item>
     </template>
@@ -246,8 +273,14 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.dynamic-form {
-  margin-top: 20px;
+
+
+
+
+/* 确保上传组件也使用相同的宽度限制 */
+.logo-uploader,
+.standard-uploader {
+  max-width: 600px;
 }
 
 .cert-preview {
@@ -255,11 +288,64 @@ onMounted(() => {
   display: inline-block;
 }
 
+/* 文件上传组件样式 */
+.file-upload-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 图片预览容器 */
+.logo-preview-wrapper {
+  margin: 8px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* 图片预览样式 */
+.logo-preview-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+  background-color: #fafafa;
+  padding: 8px;
+  border: 1px solid #e4e7ed;
+}
+
+/* 文件预览样式 */
+.file-preview {
+  margin: 8px 0;
+}
+
+/* 标准上传组件样式 */
+.standard-uploader {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 确保上传列表样式统一 */
+.standard-uploader :deep(.el-upload-list) {
+  margin-top: 8px;
+  width: fit-content;
+}
+
+/* 确保上传按钮样式一致 */
+.standard-uploader .el-button {
+  width: fit-content;
+}
+
+/* 确保所有上传组件样式一致 */
 .logo-uploader {
   margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .logo-uploader :deep(.el-upload-list) {
   margin-top: 8px;
+  width: fit-content;
 }
 </style>

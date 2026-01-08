@@ -29,6 +29,7 @@
             <span class="user">当前用户：{{ userLabel }}</span>
             <template #dropdown>
               <el-dropdown-menu>
+                <el-dropdown-item @click="onRefreshToken">刷新Token</el-dropdown-item>
                 <el-dropdown-item divided @click="onLogout">退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
@@ -54,6 +55,7 @@ const {
   userLabel,
   goLogin,
   onLogout,
+  onRefreshToken,
 } = useLayout()
 </script>
 

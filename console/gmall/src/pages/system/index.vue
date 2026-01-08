@@ -128,5 +128,12 @@ onMounted(() => {
 
 .settings-tabs :deep(.el-tabs__content) {
   padding: 20px 0;
+  width: 80%;
 }
+
+.settings-tabs :deep(.el-slider) {
+  padding: 20px 0;
+  width: 98%;
+}
+
 </style>
