@@ -1,12 +1,7 @@
 <template>
   <div class="page">
     <el-card shadow="never" v-loading="loading">
-      <div class="head">
-        <div class="title">分类详情</div>
-        <div class="ops">
-          <el-button @click="back">返回</el-button>
-        </div>
-      </div>
+
 
       <div v-if="info" class="grid">
         <el-card shadow="never" class="panel">
@@ -70,10 +65,6 @@ async function load() {
   } finally {
     loading.value = false
   }
-}
-
-function back() {
-  router.back()
 }
 
 onMounted(load)

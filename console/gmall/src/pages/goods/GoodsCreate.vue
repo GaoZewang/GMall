@@ -1,9 +1,7 @@
 <template>
   <div class="page">
     <el-card shadow="never">
-      <PageHeader :title="isEdit ? '编辑商品' : '新增商品'">
-        <el-button @click="back">返回</el-button>
-      </PageHeader>
+      
 
       <el-form ref="formRef" :model="form" :rules="rules" label-width="96px" class="form">
         <!-- 基本信息 -->
@@ -746,9 +744,6 @@ onMounted(() => {
   }
 })
 
-function back() {
-  router.back()
-}
 </script>
 
 <style scoped>

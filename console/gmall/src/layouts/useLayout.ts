@@ -68,6 +68,24 @@ export function useLayout() {
     router.push('/login')
   }
 
+  /** 全局返回功能 */
+  function handleBack() {
+    router.back()
+  }
+
+  /** 是否显示返回按钮 */
+  const showBackButton = computed(() => {
+    // 登录页不显示返回按钮
+    if (route.path === '/login') return false
+    
+    // 首页和列表页面不显示返回按钮（根据路由路径判断）
+    const noBackPages = ['/', '/goods', '/merchant', '/category', '/shop', '/orders', '/users', '/system']
+    if (noBackPages.includes(route.path)) return false
+    
+    // 其他页面显示返回按钮
+    return true
+  })
+
   /** 测试刷新Token */
   async function onRefreshToken() {
     if (!auth.refreshToken) {
@@ -95,9 +113,12 @@ export function useLayout() {
     pageTitle,
     active,
     userLabel,
+    route,
     goLogin,
     onLogout,
     onRefreshToken,
+    handleBack,
+    showBackButton,
     fetchMe,      // 需要时可手动刷新
     loadingMe,    // 需要时可用于显示 loading
   }

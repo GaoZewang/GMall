@@ -21,6 +21,40 @@
     <el-container>
       <el-header class="header">
         <div class="left">
+          <!-- 条件显示图标：返回页面显示箭头左图标可点击，首页显示home图标，列表页显示list图标 -->
+          <template v-if="showBackButton">
+            <span @click="handleBack" class="back-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M5 12l14 0"/>
+                <path d="M5 12l6 6"/>
+                <path d="M5 12l6 -6"/>
+              </svg>
+            </span>
+          </template>
+          <template v-else-if="route.path === '/'">
+            <span class="page-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-home">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M5 12l-2 0l9 -9l9 9l-2 0"/>
+                <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/>
+                <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/>
+              </svg>
+            </span>
+          </template>
+          <template v-else>
+            <span class="page-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-list">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M8 6h12"/>
+                <path d="M8 12h12"/>
+                <path d="M8 18h12"/>
+                <path d="M4 6v.01"/>
+                <path d="M4 12v.01"/>
+                <path d="M4 18v.01"/>
+              </svg>
+            </span>
+          </template>
           <div class="title">{{ pageTitle }}</div>
         </div>
 
@@ -53,9 +87,12 @@ const {
   pageTitle,
   active,
   userLabel,
+  route,
   goLogin,
   onLogout,
   onRefreshToken,
+  handleBack,
+  showBackButton,
 } = useLayout()
 </script>
 
@@ -91,11 +128,46 @@ const {
   display: flex; align-items: center; justify-content: space-between;
   border-radius: 10px;
   box-shadow: 10px #888888;
-  margin: 10px 5px;
+  margin: 10px 12px;
   height: 10%;
+  width: 98.5%;
 }
 
-.title { font-weight: 900; }
+.left {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.title { font-weight: 900; font-size: 18px; margin-left: 0px;margin-top: -3px; line-height: 1; }
+
+.back-icon,
+.page-icon {
+  color: #1a1919;
+  transition: color 0.3s ease;
+  display: inline-block;
+  cursor: pointer;
+  padding: 6px;
+  margin-right: 4px;
+  border-radius: 4px;
+}
+
+.back-icon:hover {
+  color: #409eff;
+  background-color: rgba(64, 158, 255, 0.1);
+}
+
+.page-icon {
+  cursor: default;
+  color: #909399;
+}
+
+/* 确保图标居中对齐 */
+.back-icon svg,
+.page-icon svg {
+  display: block;
+  vertical-align: middle;
+}
 
 .user { cursor: pointer; color: var(--text); font-weight: 700; }
 

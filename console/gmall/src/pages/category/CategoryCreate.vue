@@ -1,12 +1,7 @@
 <template>
   <div class="page">
     <el-card shadow="never">
-      <div class="head">
-        <div class="title">{{ isEdit ? '编辑分类' : '新增分类' }}</div>
-        <div class="ops">
-          <el-button @click="back">返回</el-button>
-        </div>
-      </div>
+
 
       <el-form
         ref="formRef"
@@ -150,7 +145,7 @@ async function submit() {
       })
       ElMessage.success('创建成功')
     }
-    back()
+    // back()
   } finally {
     loading.value = false
   }
@@ -159,10 +154,6 @@ async function submit() {
 function resetForm() {
   if (!formRef.value) return
   formRef.value.resetFields()
-}
-
-function back() {
-  router.back()
 }
 
 onMounted(() => {

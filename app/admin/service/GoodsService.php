@@ -50,6 +50,9 @@ class GoodsService
             }
             $data['sku']=$skuData;
         }
+        $data['category_name']=BaseModel::make('system_category')->getInfo(['id'=>$data['category_id']],['category_name'])['category_name'];
+        $data['merchant_name']=$data['merchant_id']==0?'平台商品':BaseModel::make('admin_merchant')->getInfo(['id'=>$data['merchant_id']],['name'])['name'];
+        $data['shop_name']=$data['shop_id']==0?'平台商品':BaseModel::make('admin_store')->getInfo(['id'=>$data['shop_id']],['name'])['name'];
         return $data;
     }
 
@@ -74,6 +77,7 @@ class GoodsService
             $goodsData=[
                 'merchant_id'    => $merchantId,
                 'goods_name'     => $data['goods_name'],
+                'goods_code'     => 'G-'.time().rand(1000,9999),
                 'subtitle'       => $data['subtitle'] ?? null,
                 'category_id'    => $data['category_id'],
                 'cover_image'    => $data['cover_image'] ?? null,

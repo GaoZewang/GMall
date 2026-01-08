@@ -1,10 +1,9 @@
 <template>
   <div class="page">
     <el-card shadow="never">
-      <PageHeader :title="'查看商户'">
-        <el-button @click="back">返回</el-button>
+      <div class="ops">
         <el-button type="primary" @click="edit">编辑</el-button>
-      </PageHeader>
+      </div>
 
       <el-form :model="merchantInfo" label-width="120px" class="detail-form">
         <!-- 基本信息 -->
@@ -180,10 +179,6 @@ async function loadMerchantInfo() {
 }
 
 // 返回列表页
-function back() {
-  router.push('/merchant')
-}
-
 // 跳转到编辑页
 function edit() {
   router.push(`/merchant/edit/${merchantId.value}`)

@@ -49,9 +49,13 @@ export type GoodsSku = {
 export type GoodsInfo = {
   id: number
   merchant_id: number
+  merchant_name: string
+  shop_name: string
   goods_name: string
   subtitle: string
   category_id: number
+  category_name: string
+  goods_code: string
   cover_image: string
   images: string[]
   description: string
