@@ -4,14 +4,14 @@ namespace app\admin\model;
 
 use support\Model;
 
-class SystemRoleModel extends Model
+class SystemSettingModel extends Model
 {
     /**
      * 与模型关联的表名
      *
      * @var string
      */
-    protected $table = 'system_role';
+    protected $table = 'system_setting';
 
     /**
      * 重定义主键，默认是id
@@ -28,16 +28,15 @@ class SystemRoleModel extends Model
     public $timestamps = false;
 
     /**
-     * 列表
-     * @param array $where
-     * @param array $filed
-     * @param string $orderFiled
-     * @param string $order
-     * @param int $page
-     * @param int $perPage
-     * @return array
+     * @param $where
+     * @param $filed
+     * @param $orderFiled
+     * @param $order
+     * @param $page
+     * @param $perPage
+     * @return mixed[]
      */
-    public static function getList(array $where,array $filed,string $orderFiled,string $order,int $page,int $perPage):array
+    public static function getList($where,$filed,$orderFiled,$order,$page,$perPage):array
     {
        return self::where($where)
            ->orderBy($orderFiled,$order)
@@ -47,12 +46,10 @@ class SystemRoleModel extends Model
     }
 
     /**
-     * 详情
-     * @param array $where
-     * @param array $filed
+     * @param $where
      * @return array
      */
-    public static function getInfo(array $where,array $filed):array
+    public static function getInfo($where,$filed):array
     {
         return self::where($where)->first($filed)->toArray();
     }
@@ -73,9 +70,18 @@ class SystemRoleModel extends Model
      * @param array $attributes
      * @return int
      */
-    public static function updated(array $where, array $attributes):int
+    public static function edit(array $where, array $attributes):int
     {
         return self::where($where)->update($attributes);
     }
 
+    /**
+     * 删除
+     * @param array $where
+     * @return int
+     */
+    public static function deleteByWhere(array $where):int
+    {
+        return self::where($where)->delete();
+    }
 }

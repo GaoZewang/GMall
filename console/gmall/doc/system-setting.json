@@ -1,0 +1,337 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "系统配置模块",
+    "description": "系统配置管理接口",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/admin",
+      "description": "后台管理接口"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "SystemSetting": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "配置ID"
+          },
+          "tag": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "设置标识"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 50,
+            "description": "设置名称"
+          },
+          "content": {
+            "type": "object",
+            "description": "设置内容"
+          },
+          "create_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "创建时间"
+          },
+          "update_time": {
+            "type": "string",
+            "format": "date-time",
+            "description": "更新时间"
+          }
+        }
+      },
+      "ListResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "状态码"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "description": "总数量"
+              },
+              "per_page": {
+                "type": "integer",
+                "description": "每页数量"
+              },
+              "current_page": {
+                "type": "integer",
+                "description": "当前页码"
+              },
+              "last_page": {
+                "type": "integer",
+                "description": "最后页码"
+              },
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SystemSetting"
+                }
+              }
+            }
+          }
+        }
+      },
+      "InfoResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SystemSetting"
+          }
+        }
+      },
+      "BaseResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer"
+          },
+          "data": {
+            "type": "object",
+            "nullable": true
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/setting/list": {
+      "get": {
+        "summary": "获取系统配置列表",
+        "description": "分页获取系统配置列表",
+        "tags": ["系统配置"],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "页码",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "example": 1
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "每页数量",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "example": 10
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setting/info": {
+      "get": {
+        "summary": "获取系统配置详情",
+        "description": "根据ID获取系统配置详情",
+        "tags": ["系统配置"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "配置ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InfoResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setting/create": {
+      "post": {
+        "summary": "创建系统配置",
+        "description": "创建新的系统配置",
+        "tags": ["系统配置"],
+        "requestBody": {
+          "description": "创建参数",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": ["tag", "name", "content"],
+                "properties": {
+                  "tag": {
+                    "type": "string",
+                    "description": "设置标识（最大20字符）",
+                    "example": "site_config"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "设置名称（最大50字符）",
+                    "example": "站点配置"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "设置内容（JSON格式）",
+                    "example": "{\"site_name\": \"Gmall\"}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setting/update": {
+      "post": {
+        "summary": "更新系统配置",
+        "description": "更新系统配置信息",
+        "tags": ["系统配置"],
+        "requestBody": {
+          "description": "更新参数",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": ["id", "tag", "name", "content"],
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "配置ID",
+                    "example": 1
+                  },
+                  "tag": {
+                    "type": "string",
+                    "description": "设置标识（最大20字符）",
+                    "example": "site_config"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "设置名称（最大50字符）",
+                    "example": "站点配置"
+                  },
+                  "content": {
+                    "type": "string",
+                    "description": "设置内容（JSON格式）",
+                    "example": "{\"site_name\": \"Gmall Pro\"}"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/setting/del": {
+      "post": {
+        "summary": "删除系统配置",
+        "description": "删除系统配置",
+        "tags": ["系统配置"],
+        "requestBody": {
+          "description": "删除参数",
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "type": "object",
+                "required": ["id"],
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "配置ID",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

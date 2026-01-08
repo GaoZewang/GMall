@@ -72,7 +72,7 @@ class Handler implements ExceptionHandlerInterface
 
         // 1. 统一处理 JWT 异常（如果没在中间件里处理）
         if ($exception instanceof JwtTokenException) {
-            echo 111;
+
             return json([
                 'code' => $exception->getCode() ?: 401011,
 //                'code' => 401,
@@ -82,7 +82,7 @@ class Handler implements ExceptionHandlerInterface
 
         //刷新token时异常
         if ($exception instanceof JwtRefreshTokenExpiredException) {
-            echo 111;
+
             return json([
 //                'code' => $exception->getCode() ?: 401012,
                 'code' => 401,

@@ -37,6 +37,15 @@ Route::group('', function () {
         Route::post('/update', [app\admin\controller\SystemCategoryController::class, 'updateOperation']);
         Route::post('/del', [app\admin\controller\SystemCategoryController::class, 'delOperation']);
     });
+    
+    //系统配置
+    Route::group('/setting', function () {
+        Route::get('/list', [app\admin\controller\SystemSettingController::class, 'getList']);
+        Route::get('/info', [app\admin\controller\SystemSettingController::class, 'getInfo']);
+        Route::post('/create', [app\admin\controller\SystemSettingController::class, 'createOperation']);
+        Route::post('/update', [app\admin\controller\SystemSettingController::class, 'updateOperation']);
+        Route::post('/del', [app\admin\controller\SystemSettingController::class, 'delOperation']);
+    });
 
 })->middleware([
     app\middleware\BaseMiddleware::class ,
