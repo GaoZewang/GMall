@@ -24,7 +24,7 @@
       <el-table :data="rows" v-loading="loading" class="table" row-key="id">
         <el-table-column label="ID" prop="id" width="80" />
 
-        <el-table-column label="封面" width="84">
+        <el-table-column label="封面" width="100">
           <template #default="{ row }">
             <el-image
               :src="row.cover_image"
@@ -36,10 +36,16 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="商品信息" min-width="180">
+        <el-table-column label="商品信息" min-width="100">
           <template #default="{ row }">
             <div class="gname">{{ row.goods_name }}</div>
             <div class="gsub">{{ row.subtitle }}</div>
+          </template>
+        </el-table-column>
+
+         <el-table-column label="商品货号" min-width="100">
+          <template #default="{ row }">
+            <div class="gname">{{ row.goods_code }}</div>
           </template>
         </el-table-column>
 
