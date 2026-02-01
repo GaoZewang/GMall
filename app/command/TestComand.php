@@ -1,23 +1,22 @@
 <?php
+/**
+ * @Project   Gmall
+ * @File      TestComand.php
+ * @Author    MrGao
+ * @Date      2026/2/1 20:16
+ */
 
 namespace app\command;
 
-use support\Db;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MakeController extends BaseCommand
+class TestComand extends BaseCommand
 {
-    protected static $defaultName = 'make:controller';
-    protected static $defaultDescription = 'Generate controller from table';
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // 在这里添加你的命令逻辑
-        $data=$this->check($input, $output,'controller');
+        $data=$this->check($input, $output,'controllerss');
         if($data['code']!=200){
             $msg=$data['msg'];
             $output->writeln("<error>>Controller overwritten: $msg</error>");
@@ -43,9 +42,9 @@ class MakeController extends BaseCommand
         $file=$data['file'];
         file_put_contents($file, $content);
         if ($data['force'] && file_exists($data['file'])) {
-            $output->writeln("<info>Controller overwritten: $file</info>");
+            $output->writeln("<error>Controller overwritten: $file</error>");
         } else {
-            $output->writeln("<info>Controller created: $file</info>");
+            $output->writeln("<error>Controller created: $file</error>");
         }
         return self::SUCCESS;
     }

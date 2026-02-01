@@ -11,7 +11,7 @@ namespace app\api\model;
 
 use support\Model;
 
-class GoodsShopModelModel extends Model
+class GoodsShopModel extends Model
 {
     /**
      * 与模型关联的表名

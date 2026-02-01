@@ -8,4 +8,5 @@
 return [
     \app\command\MakeModel::class,
     \app\command\MakeController::class,  // 新添加
+//    \app\command\TestComand::class,
 ];
