@@ -3,7 +3,7 @@ return  [
     'default' => 'mysql',
     'connections' => [
         'mysql' => [
-            'driver'      => 'mysql',
+            'driver'      => getenv('DB_DRIVER', 'mysql'),
             'host'        => '127.0.0.1',
             'port'        => '3306',
             'database'    => 'gmall_shop',

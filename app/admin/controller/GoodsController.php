@@ -54,7 +54,6 @@ class GoodsController
         BaseValidate::validate($params,'info');
         $service=new GoodsService;
         $data=$service->getGoodsInfo($params['id'],['*']);
-
         return success($data);
     }
 

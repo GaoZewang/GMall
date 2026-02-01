@@ -5,13 +5,13 @@
  * @Author    MrGao
  * @Date      time()
  */
-namespace app\api\controller;
+namespace app\{{module}}\controller;
 use support\Request;
 use support\Response;
 use app\service\BaseService;
 use app\validate\BaseValidate;
-use app\api\validate\GoodsValidator;
-class GoodsController
+use app\{{module}}\validate\{{class}}Validator;
+class {{class}}Controller
 {
 
     /**
@@ -25,7 +25,7 @@ class GoodsController
         $params=$request->all();
         $where[]=[];
         BaseValidate::validate($params,'list');
-        $service=new BaseService('gm_goods');
+        $service=new BaseService('{{table}}');
         $filed=['*'];
         $data=$service->getListWithPage($where,$filed);
         return success($data);
@@ -41,7 +41,7 @@ class GoodsController
     {
         $params=$request->get();
         BaseValidate::validate($params,'info');
-        $service=new BaseService('gm_goods');
+        $service=new BaseService('{{table}}');
         $data=$service->getInfo($params['id'],['*']);
         return success($data);
     }
@@ -54,7 +54,7 @@ class GoodsController
      public function createOption(Request $request):Response
      {
         $params=$request->post();
-        $service=new BaseService('gm_goods');
+        $service=new BaseService('{{table}}');
         $res= $service->edit(['id'=>$params['id']],$params);
         if($res){
             return success();
@@ -71,7 +71,7 @@ class GoodsController
      public function updateOption(Request $request):Response
      {
         $params=$request->post();
-        $service=new BaseService('gm_goods');
+        $service=new BaseService('{{table}}');
         $res= $service->edit(['id'=>$params['id']],$params);
         if($res){
             return success();
@@ -88,7 +88,7 @@ class GoodsController
      public function deleteOption(Request $request):Response
      {
           $params=$request->get();
-          $service=new BaseService('gm_goods');
+          $service=new BaseService('{{table}}');
           BaseValidate::validate($params,'info');
           $id=explode(',',$params['id']);
           $res= $service->edit(['id'=>$id],['is_delete'=>1]);
