@@ -9,7 +9,6 @@
 namespace app\admin\service;
 
 use app\model\BaseModel;
-use app\service\BaseService;
 use support\Db;
 
 class GoodsService

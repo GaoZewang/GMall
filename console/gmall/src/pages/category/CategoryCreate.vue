@@ -38,8 +38,8 @@
 
         <el-form-item label="是否为叶子节点" prop="is_leaf">
           <el-radio-group v-model="form.is_leaf">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="0">否</el-radio>
+            <el-radio :value="1">是</el-radio>
+            <el-radio :value="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
 

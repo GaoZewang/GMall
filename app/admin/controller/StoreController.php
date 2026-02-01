@@ -1,15 +1,11 @@
 <?php
-/**
- * @Project   Gmall
- * @File      StoreController.php
- * @Author    MrGao
- * @Date      2025/12/18 18:41
- */
 
 namespace app\admin\controller;
 
-use app\admin\validate\MerchantValidate;
-use app\model\BaseModel;
+use app\admin\service\StoreService;
+use app\admin\model\StoreModel;
+use app\admin\model\AdminUserModel;
+use app\admin\validate\StoreValidate;
 use app\service\BaseService;
 use app\validate\BaseValidate;
 use support\Request;
@@ -18,7 +14,7 @@ use support\Response;
 class StoreController
 {
     /**
-     * 商户列表
+     * 店铺列表
      * @param Request $request
      * @return Response
      */
@@ -26,14 +22,13 @@ class StoreController
     {
         $params=$request->all();
         BaseValidate::validate($params,'list');
-        $where[]=['is_delete','=',0];
         $where[]=['merchant_id','=',$params['merchant_id']];
-        if($params['name']){
+        if(!empty($params['name'])){
             $where[]=['name','like','%'.$params['name'].'%'];
         }
-        $filed=['id','name','balance','revenue','contact_phone','status','created_at','updated_at'];
-        $service=new BaseService('admin_store');
-        $data=$service->getListWithPage($where,$filed,'id','desc',$request->page(),$request->pageSize());
+        $filed=['id','merchant_id','admin_user_id','balance','revenue','name','address','contact_phone','status','created_at','updated_at'];
+        $baseService = new BaseService('admin_store');
+        $data=$baseService->getListWithPage($where,$filed,'id','desc',$request->page(),$request->pageSize());
         return success($data) ;
     }
 
@@ -46,13 +41,13 @@ class StoreController
     {
         $params=$request->all();
         BaseValidate::validate($params,'info');
-        $filed=['*'];
-        $service=new BaseService('admin_store');
-        $data=$service->getInfo(['id'=>$params['id']],$filed);
+        $storeService = new StoreService();
+        $data=$storeService->getStoreDetail($params['id']);
         $data['admin_user_name']='';
         if(!empty($data)){
-            $adminUserModel= BaseModel::make('admin_user');
-            $data['admin_user_name']=$adminUserModel->where(['id'=>$data['admin_user_id']])->value('username');
+            $adminUserModel= new AdminUserModel();
+            $adminUserInfo = $adminUserModel->getAdminUserInfo(['id'=>$data['admin_user_id']],['username']);
+            $data['admin_user_name']=$adminUserInfo['username'] ?? '';
         }
         return success($data) ;
     }
@@ -71,10 +66,11 @@ class StoreController
         if(isset($params['revenue'])){
             unset($params['revenue']);
         }
-        MerchantValidate::validate($params,'add');
-        $service=new BaseService('admin_store');
-        if($service->add($params))  {
-            return success() ;
+//        StoreValidate::validate($params,'add');
+        $storeService = new StoreService();
+        $result = $storeService->createStore($params);
+        if($result)  {
+            return success(['id' => $result]) ;
         }
         return error() ;
     }
@@ -94,9 +90,10 @@ class StoreController
             unset($params['revenue']);
         }
         $params['updated_at']=date('Y-m-d H:i:s',time());
-        MerchantValidate::validate($params,'edit');
-        $service=new BaseService('admin_store');
-        if($service->edit(['id'=>$params['id']],$params))  {
+//        StoreValidate::validate($params,'edit');
+        $storeService = new StoreService();
+        $result = $storeService->updateStore($params['id'], $params);
+        if($result)  {
             return success() ;
         }
         return error() ;
@@ -111,8 +108,11 @@ class StoreController
     {
         $params=$request->all();
         BaseValidate::validate($params,'info');
-        $service=new BaseService('admin_store');
-        $res=$service->edit(['id'=>$params['id']],['is_delete'=>1,'updated_at'=>date('Y-m-d H:i:s',time())]);
-        return error($res) ;
+        $storeService = new StoreService();
+        $result = $storeService->deleteStore($params['id']);
+        if($result) {
+            return success() ;
+        }
+        return error() ;
     }
 }

@@ -21,7 +21,19 @@
 
           <el-col :xs="24" :md="12">
             <el-form-item label="类目" prop="category_id">
-              <el-input-number v-model="form.category_id" :min="1" style="width: 100%" />
+              <el-select
+                v-model="form.category_id"
+                placeholder="请选择类目"
+                style="width: 100%"
+                :loading="loadingCategories"
+              >
+                <el-option
+                  v-for="category in flatCategories"
+                  :key="category.value"
+                  :label="category.label"
+                  :value="category.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
 
@@ -264,6 +276,7 @@ import type { FormInstance, FormRules, UploadRequestOptions } from 'element-plus
 import { ElMessage } from 'element-plus'
 import { adminGoodsCreateApi, adminGoodsInfoApi, adminGoodsUpdateApi } from '../../api/goods'
 import { adminUploadSingle } from '../../api/upload'
+import { adminCategoryListApi, type CategoryItem } from '../../api/category'
 import PageHeader from '../../components/PageHeader.vue'
 
 const router = useRouter()
@@ -283,6 +296,54 @@ const isEdit = computed(() => goodsId.value > 0)
 
 // 用于保存SKU的ID，在编辑模式下使用
 const skuIds = ref<Map<string, number>>(new Map())
+
+// 类目列表
+const categoryList = ref<CategoryItem[]>([])
+const loadingCategories = ref(false)
+
+// 加载类目列表
+async function loadCategories() {
+  loadingCategories.value = true
+  try {
+    const res = await adminCategoryListApi()
+    let categories: any[] = []
+    if (Array.isArray(res)) {
+      categories = res
+    } else if (res && res.data) {
+      categories = res.data
+    }
+    categoryList.value = categories
+  } catch (error) {
+    console.error('获取分类列表失败:', error)
+    ElMessage.error('获取分类列表失败')
+  } finally {
+    loadingCategories.value = false
+  }}
+
+// 递归扁平化分类列表，用于下拉选择
+function flattenCategories(categories: CategoryItem[]): { value: number; label: string; level: number }[] {
+  const result: { value: number; label: string; level: number }[] = []
+  
+  function traverse(category: CategoryItem, parentPath: string = '') {
+    const currentPath = parentPath ? `${parentPath}->${category.category_name}` : category.category_name
+    
+    result.push({
+      value: category.id,
+      label: currentPath,
+      level: parentPath.split('->').length
+    })
+    
+    if (category.children && category.children.length > 0) {
+      category.children.forEach(child => traverse(child, currentPath))
+    }
+  }
+  
+  categories.forEach(category => traverse(category))
+  return result
+}
+
+// 扁平化的分类列表
+const flatCategories = computed(() => flattenCategories(categoryList.value))
 
 type CreateGoodsPayload2 = {
   goods_name: string
@@ -738,7 +799,10 @@ async function submit() {
 }
 
 // 组件挂载时，如果是编辑模式则加载商品详情
-onMounted(() => {
+onMounted(async () => {
+  // 加载类目列表
+  await loadCategories()
+  
   if (isEdit.value) {
     loadGoodsInfo()
   }

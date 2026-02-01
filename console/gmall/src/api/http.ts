@@ -23,7 +23,7 @@ let isRefreshing = false
 let refreshSubscribers: Array<(token: string) => void> = []
 
 export const http = axios.create({
-  baseURL: (import.meta as any).env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 15000,
   headers: { 'Content-Type': 'application/json' },
 })

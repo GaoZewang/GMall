@@ -14,6 +14,8 @@ const MerchantCreate = () => import('../pages/merchant/MerchantCreate.vue')
 const MerchantDetail = () => import('../pages/merchant/MerchantDetail.vue')
 const System = () => import('../pages/system/index.vue')
 const Shop = () => import('../pages/shop/Stores.vue')
+const ShopCreate = () => import('../pages/shop/ShopCreate.vue')
+const ShopInfo = () => import('../pages/shop/ShopInfo.vue')
 const Category = () => import('../pages/category/Category.vue')
 const CategoryInfo = () => import('../pages/category/CategoryInfo.vue')
 const CategoryCreate = () => import('../pages/category/CategoryCreate.vue')
@@ -36,6 +38,9 @@ const router = createRouter({
         { path: 'merchant/:id', component: MerchantDetail, meta: { title: '商户详情' } },
 
         { path: 'shop', component: Shop, meta: { title: '店铺管理' } },
+        { path: 'shop/create', component: ShopCreate, meta: { title: '新增店铺' } },
+        { path: 'shop/edit/:id', component: ShopCreate, meta: { title: '编辑店铺' } },
+        { path: 'shop/:id', component: ShopInfo, meta: { title: '店铺详情' } },
 
         { path: 'category', component: Category, meta: { title: '分类管理' } },
         { path: 'category/create', component: CategoryCreate, meta: { title: '新增分类' } },
