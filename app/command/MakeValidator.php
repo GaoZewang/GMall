@@ -49,7 +49,7 @@ class MakeValidator extends Command
         $rulesStr = $this->buildSceneRules($columns);
 
         /* ========= 模板 ========= */
-       // $templatePath = base_path('resources/templates/validator_template.txt');
+        // $templatePath = base_path('resources/templates/validator_template.txt');
 
         $templatePath = base_path()
             .DIRECTORY_SEPARATOR.'console'
@@ -105,8 +105,8 @@ class MakeValidator extends Command
        ========================================================= */
     private function buildSceneRules($columns): string
     {
-        $add = $edit = $list = $info = $del = [];
 
+        $list=$info=$add=$edit=$del=[""];
         $maxLen = 0;
 
         // 先算最大字段长度（用于对齐）
@@ -115,44 +115,36 @@ class MakeValidator extends Command
         }
 
         foreach ($columns as $col) {
-
             $field = $col->Field;
             $type  = $col->Type;
             $nullable = strtolower($col->Null) === 'yes';
-
             $rule = $this->mapRule($type, $nullable);
-
             $pad = str_pad("'$field'", $maxLen + 2); // +2 因为引号
-
             if ($field === 'id') {
                 $idRule = "v::intVal()->positive()";
-
-                $edit[] = "                $pad => $idRule,";
-                $info[] = "                $pad => $idRule,";
-                $del[]  = "                $pad => $idRule,";
+                $edit[] = "                   $pad => $idRule,";
+                $info[] = "                   $pad => $idRule,";
+                $del[]  = "                   $pad => $idRule,";
                 continue;
             }
-
-            $add[]  = "                $pad => $rule,";
-            $edit[] = "                $pad => v::optional($rule),";
-            $list[] = "                $pad => v::optional($rule),";
+            $add[]  = "                    $pad => $rule,";
+            $edit[] = "                   $pad => v::optional($rule),";
+            $list[] = "                   $pad => v::optional($rule),";
         }
+
+
 
         $scene = function ($name, $rows) {
             if (!$rows) return '';
-
             $rows = implode("\n", $rows);
-
             return <<<PHP
 
-            '$name' => [
-$rows
-            ],
+                '$name' => [$rows
+                ],
 PHP;
         };
-
         return
-            $scene('add',  $add) .
+            $scene('add',  $add ) .
             $scene('edit', $edit) .
             $scene('list', $list) .
             $scene('info', $info) .
@@ -190,11 +182,5 @@ PHP;
         }
 
         return $rule;
-    }
-
-
-    private function studly($value)
-    {
-        return str_replace(' ', '', ucwords(str_replace('_', ' ', $value)));
     }
 }
