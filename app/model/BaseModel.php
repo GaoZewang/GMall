@@ -31,16 +31,6 @@ class BaseModel extends Model
     }
 
 
-    public function getTableInfo(): array
-    {
-        $fieldTypes = Db::select("
-        SELECT COLUMN_NAME, DATA_TYPE, IS_NULLABLE ,CHARACTER_MAXIMUM_LENGTH,COLUMN_DEFAULT,COLUMN_KEY,EXTRA,NUMERIC_PRECISION
-        FROM INFORMATION_SCHEMA.COLUMNS 
-        WHERE TABLE_NAME = :table", ['table' => 'gm_'.$this->table]);
-        return $fieldTypes;
-    }
-
-
     /**
      * 带分页的列表
      * @param array       $where       查询条件

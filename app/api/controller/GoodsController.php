@@ -6,6 +6,7 @@
  * @Date      time()
  */
 namespace app\api\controller;
+use app\api\model\GoodsModel;
 use support\Request;
 use support\Response;
 use app\service\BaseService;

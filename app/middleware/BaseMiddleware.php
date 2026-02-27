@@ -15,6 +15,7 @@ class BaseMiddleware
 {
     public function process(Request $request, callable $handler)
     {
+
         return $handler($request);
     }
 }

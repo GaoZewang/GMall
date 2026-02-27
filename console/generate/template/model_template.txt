@@ -6,12 +6,11 @@
  * @Date      2026/2/1 18:18
  */
 
-
 namespace app\{{module}}\model;
 
-use support\Model;
+use app\model\BaseModel;
 
-class {{class}}Model extends Model
+class {{class}}Model extends BaseModel
 {
     /**
      * 与模型关联的表名

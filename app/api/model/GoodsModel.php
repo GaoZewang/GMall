@@ -6,20 +6,18 @@
  * @Date      2026/2/1 18:18
  */
 
-
 namespace app\api\model;
 
 use app\model\BaseModel;
-use support\Model;
 
-class GoodsShopModel extends BaseModel
+class GoodsModel extends BaseModel
 {
     /**
      * 与模型关联的表名
      *
      * @var string
      */
-    protected $table = "gm_goods";
+    protected $table = "goods";
 
 
 

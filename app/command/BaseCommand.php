@@ -102,7 +102,7 @@ class BaseCommand extends Command
         return [
             'code'=>200 ,
             'module' => $module,
-            'table'  => $table,
+            'table'  => $input->getArgument('class'),
             'force'  => $force,
             'class'  => $class,
             'file'  => $files[$type],
