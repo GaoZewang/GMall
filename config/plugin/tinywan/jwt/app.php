@@ -50,10 +50,10 @@ return [
             $platform = JwtToken::getExtendVal('platform'); // 或者你用 'role' 也行
             //默认当成普通用户
             if ($platform === 'user') {
-                $model=BaseModel::make('user','id',false);
+                $model=BaseModel::make([],'user','id',false);
                 $filed=['id', 'username', 'email', 'nickname','phone', 'avatar','balance','status'];
             }else{
-                $model=BaseModel::make('admin_user','id',false);
+                $model=BaseModel::make([],'admin_user','id',false);
                 $filed=['id', 'username', 'email', 'status','last_login','last_ip','role_id'];
             }
             return $model->where('id', $uid)->select($filed)->first();

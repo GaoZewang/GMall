@@ -10,8 +10,7 @@ class BaseService
     private  BaseModel $model ;
     public function __construct($tableName, $primaryKey = 'id',$timeStamp = false)
     {
-
-        $this->model = BaseModel::make($tableName, $primaryKey, $timeStamp);
+        $this->model = BaseModel::make([],$tableName, $primaryKey, $timeStamp);
     }
 
     /**

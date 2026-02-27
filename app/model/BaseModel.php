@@ -9,22 +9,20 @@ class BaseModel extends Model
 {
     // 默认不启用时间戳
     public $timestamps = false;
-
-    /**
-     * 这里一定要兼容父类：第一个参数必须是 $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        parent::__construct($attributes);
-    }
-
     /**
      * 工厂方法：传表名、主键、时间戳，返回一个配置好的模型实例
+     * @param array $attributes 这里一定要兼容父类：第一个参数必须是 $attributes
+     * @param string $table 表名
+     * @param string $primaryKey 主键
+     * @param bool $timestamps 时间戳
+     * @return static
      */
-    public static function make(string $table, string $primaryKey = 'id', bool $timestamps = false): static
+    public static function make(array $attributes = [], string $table = '', string $primaryKey = 'id', bool $timestamps = false): static
     {
-        $model = new static();          // 这里必须无参，框架才不会炸
-        $model->setTable($table);      // 设置表名
+        $model = new static($attributes); // 使用父类构造函数
+        if ($table) {
+            $model->setTable($table); // 设置表名
+        }
         $model->primaryKey = $primaryKey;
         $model->timestamps = $timestamps;
         return $model;
@@ -34,7 +32,7 @@ class BaseModel extends Model
     /**
      * 带分页的列表
      * @param array       $where       查询条件
-     * @param array|mixed $fields      字段
+     * @param array       $fields      字段
      * @param string      $orderField  排序字段
      * @param string      $order       排序方式 asc/desc
      * @param int         $page        当前页
@@ -44,7 +42,7 @@ class BaseModel extends Model
      */
     public  function getListWithPage(
         array  $where = [],
-               $fields = ['*'],
+        array  $fields = ['*'],
         string $orderField = 'id',
         string $order = 'desc',
         int    $page = 1,
