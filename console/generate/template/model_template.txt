@@ -19,8 +19,6 @@ class {{class}}Model extends BaseModel
      */
     protected $table = "{{table}}";
 
-
-
     /**
      * 重定义主键，默认是id
      *
