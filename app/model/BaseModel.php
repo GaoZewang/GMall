@@ -2,7 +2,6 @@
 
 namespace app\model;
 
-use support\Db;
 use support\Model;
 
 class BaseModel extends Model
