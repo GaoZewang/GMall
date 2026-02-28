@@ -18,7 +18,7 @@ class SystemRoleController
     {
         $params=$request->all();
         BaseValidate::validate($params,'list');
-        $filed=['id','name','description','status'];
+        $filed=['id','name','description','slug','status'];
         $service=new BaseService('system_role');
         $data=$service->getListWithPage(
             ['is_delete'=>0],$filed,'id','desc',
@@ -36,9 +36,10 @@ class SystemRoleController
     {
         $params=$request->all();
         BaseValidate::validate($params,'info');
-        $filed=['id','name','description','status','created_at','updated_at'];
+        $filed=['id','name','description','status','permissions','created_at','slug','updated_at'];
         $service=new BaseService('system_role');
         $data=$service->getInfo(['id'=>$params['id']],$filed);
+        $data['permissions']=json_decode($data['permissions'],true);
         return success($data) ;
     }
 
@@ -67,6 +68,7 @@ class SystemRoleController
     {
         $params=$request->post();
         $params['updated_at']=date('Y-m-d H:i:s',time());
+        $params['permissions']=json_encode($params['permissions']);
         SystemRoleValidate::validate($params,'edit');
         $service=new BaseService('system_role');
         if($service->edit(['id'=>$params['id']],$params))  {

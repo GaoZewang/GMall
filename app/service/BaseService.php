@@ -94,4 +94,16 @@ class BaseService
     {
         return $this->model->edit($where,$data);
     }
+
+    /**
+     * 删除
+     * @param array $where
+     * @return int
+     */
+    public function del(
+        array $where,
+    ):int
+    {
+        return $this->model->del($where);
+    }
 }

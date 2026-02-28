@@ -39,7 +39,7 @@ class SystemPermissionController
     {
         $params=$request->all();
         BaseValidate::validate($params,'info');
-        $filed=['id','name','icon','parent_id','description','status'];
+        $filed=['id','name','icon','parent_id','code','route_url','description','status'];
         $service=new BaseService('system_permission');
         $data=$service->getInfo(['id'=>$params['id']],$filed);
         return success($data) ;

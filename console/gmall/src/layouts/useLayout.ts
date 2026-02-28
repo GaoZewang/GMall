@@ -21,7 +21,31 @@ export function useLayout() {
   const pageTitle = computed(() => (route.meta.title as string) || 'Gmall')
 
   /** 菜单高亮 */
-  const active = computed(() => route.path)
+  const active = computed(() => {
+    const path = route.path
+    
+    // 检查是否为子菜单路径
+    const menuItems = menus.value
+    for (const menu of menuItems) {
+      if (menu.children) {
+        for (const child of menu.children) {
+          if (path === child.path) {
+            // 返回子菜单路径，Element Plus会自动处理父菜单的激活状态
+            return child.path
+          }
+        }
+      } else if (path === menu.path) {
+        return menu.path
+      }
+    }
+    
+    // 默认为一级路径
+    const firstPath = path.split('/')[1]
+    if (firstPath) {
+      return `/${firstPath}`
+    }
+    return path
+  })
 
   /** 顶栏右侧用户名 */
   const userLabel = computed(() => auth.user?.username || '管理员')

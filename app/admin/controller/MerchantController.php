@@ -43,7 +43,7 @@ class MerchantController
         $data=$service->getInfo(['id'=>$params['id']],$filed);
         $data['admin_user_name']='';
         if(!empty($data)){
-            $adminUserModel= BaseModel::make('admin_user');
+            $adminUserModel= BaseModel::make([],'admin_user');
             $data['admin_user_name']=$adminUserModel->where(['id'=>$data['admin_user_id']])->value('username');
         }
         return success($data) ;

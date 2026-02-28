@@ -17,12 +17,14 @@ class SystemRoleValidate
            'add'=>[
                'name' => Validator::stringType()->notEmpty()->setName('Name'),
                'slug' => Validator::stringType()->notEmpty()->setName('slug'),
+               'permissions' => Validator::stringType()->notEmpty()->setName('permissions'),
                'description' => Validator::stringType()->notEmpty()->setName('Description'),
            ],
            'edit'=>[
                'id' => Validator::intVal()->positive()->setName('ID'),
                'name' => Validator::stringType()->notEmpty()->setName('Name'),
                'slug' => Validator::stringType()->notEmpty()->setName('slug'),
+               'permissions' => Validator::stringType()->notEmpty()->setName('permissions'),
                'description' => Validator::stringType()->notEmpty()->setName('Description'),
            ],
            'status'=>[

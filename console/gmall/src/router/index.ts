@@ -20,6 +20,12 @@ const Category = () => import('../pages/category/Category.vue')
 const CategoryInfo = () => import('../pages/category/CategoryInfo.vue')
 const CategoryCreate = () => import('../pages/category/CategoryCreate.vue')
 const GoodsCreate = () => import('../pages/goods/GoodsCreate.vue')
+const Role = () => import('../pages/role/Role.vue')
+const RoleCreate = () => import('../pages/role/RoleCreate.vue')
+const RoleInfo = () => import('../pages/role/RoleInfo.vue')
+const Permission = () => import('../pages/permission/Permission.vue')
+const PermissionCreate = () => import('../pages/permission/PermissionCreate.vue')
+const PermissionInfo = () => import('../pages/permission/PermissionInfo.vue')
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -51,6 +57,14 @@ const router = createRouter({
         { path: 'users', component: Users, meta: { title: '用户管理' } },
         
         { path: 'system', component: System, meta: { title: '系统设置' } },
+        { path: 'role', component: Role, meta: { title: '角色管理' } },
+        { path: 'role/create', component: RoleCreate, meta: { title: '新增角色' } },
+        { path: 'role/edit/:id', component: RoleCreate, meta: { title: '编辑角色' } },
+        { path: 'role/:id', component: RoleInfo, meta: { title: '角色详情' } },
+        { path: 'permission', component: Permission, meta: { title: '权限管理' } },
+        { path: 'permission/create', component: PermissionCreate, meta: { title: '新增权限' } },
+        { path: 'permission/edit/:id', component: PermissionCreate, meta: { title: '编辑权限' } },
+        { path: 'permission/:id', component: PermissionInfo, meta: { title: '权限详情' } },
       ],
     },
     // 兜底：其它路径都回首页（会被守卫拦到 login）

@@ -3,6 +3,7 @@ import { http } from './http'
 export type GoodsItem = {
   id: number
   merchant_id: number
+  goods_code: string
   goods_name: string
   subtitle: string
   category_id: number

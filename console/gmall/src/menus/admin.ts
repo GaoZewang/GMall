@@ -8,7 +8,12 @@ export const adminMenus: MenuItem[] = [
   { title: '分类管理', path: '/category' },
   { title: '订单管理', path: '/orders' },
   { title: '用户管理', path: '/users' },
-  { title: '系统设置', path: '/system' },
+  { title: '系统设置', path: '/system',
+    children: [
+      { title: '配置中心', path: '/system' },
+      { title: '角色管理', path: '/role' },
+      { title: '菜单管理', path: '/permission' },
+    ]},
 ]
 
 export default adminMenus

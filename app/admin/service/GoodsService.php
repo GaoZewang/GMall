@@ -33,12 +33,12 @@ class GoodsService
      */
     public function getGoodsInfo(int $id,array $fields=['*']): array
     {
-        $goodsModel=BaseModel::make('goods');
+        $goodsModel=BaseModel::make([],'goods');
         $data=$goodsModel->getInfo(['id'=>$id],$fields);
         if(!empty($data)){
             $data['images']=json_decode($data['images'],true);
             $data['attrs_template']=json_decode($data['attrs_template'],true);
-            $skuModel=BaseModel::make('goods_sku');
+            $skuModel=BaseModel::make([],'goods_sku');
             $skuData=$skuModel->getList(['goods_id'=>$id],['*'],'id','desc');
             if(!empty($skuData)){
                 foreach ($skuData as &$sku) {
@@ -49,9 +49,9 @@ class GoodsService
             }
             $data['sku']=$skuData;
         }
-        $data['category_name']=BaseModel::make('system_category')->getInfo(['id'=>$data['category_id']],['category_name'])['category_name'];
-        $data['merchant_name']=$data['merchant_id']==0?'平台商品':BaseModel::make('admin_merchant')->getInfo(['id'=>$data['merchant_id']],['name'])['name'];
-        $data['shop_name']=$data['shop_id']==0?'平台商品':BaseModel::make('admin_store')->getInfo(['id'=>$data['shop_id']],['name'])['name'];
+        $data['category_name']=BaseModel::make([],'system_category')->getInfo(['id'=>$data['category_id']],['category_name'])['category_name'];
+        $data['merchant_name']=$data['merchant_id']==0?'平台商品':BaseModel::make([],'admin_merchant')->getInfo(['id'=>$data['merchant_id']],['name'])['name'];
+        $data['shop_name']=$data['shop_id']==0?'平台商品':BaseModel::make([],'admin_store')->getInfo(['id'=>$data['shop_id']],['name'])['name'];
         return $data;
     }
 
@@ -71,8 +71,8 @@ class GoodsService
         }
         Db::beginTransaction();
         try {
-            $goodsModel=BaseModel::make('goods');
-            $skuModel=BaseModel::make('goods_sku');
+            $goodsModel=BaseModel::make([],'goods');
+            $skuModel=BaseModel::make([],'goods_sku');
             $goodsData=[
                 'merchant_id'    => $merchantId,
                 'goods_name'     => $data['goods_name'],
@@ -135,8 +135,8 @@ class GoodsService
         }
         Db::beginTransaction();
         try {
-            $goodsModel=BaseModel::make('goods');
-            $skuModel=BaseModel::make('goods_sku');
+            $goodsModel=BaseModel::make([],'goods');
+            $skuModel=BaseModel::make([],'goods_sku');
             $goodsData=[
                 'merchant_id'    => $merchantId,
                 'goods_name'     => $data['goods_name'],
@@ -223,6 +223,6 @@ class GoodsService
      */
     public function deleteGoods(array $where): bool
     {
-        return BaseModel::make('goods')->where($where)->update(['is_deleted'=>1]);
+        return BaseModel::make([],'goods')->where($where)->update(['is_deleted'=>1]);
     }
 }

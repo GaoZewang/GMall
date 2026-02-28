@@ -11,9 +11,19 @@
       </div>
 
       <el-menu router :default-active="active" class="menu">
-        <el-menu-item v-for="m in menus" :key="m.path" :index="m.path">
-          <span>{{ m.title }}</span>
-        </el-menu-item>
+        <template v-for="m in menus" :key="m.path">
+          <el-menu-item v-if="!m.children" :index="m.path">
+            <span>{{ m.title }}</span>
+          </el-menu-item>
+          <el-sub-menu v-else :index="m.path">
+            <template #title>
+              <span>{{ m.title }}</span>
+            </template>
+            <el-menu-item v-for="child in m.children" :key="child.path" :index="child.path">
+              <span>{{ child.title }}</span>
+            </el-menu-item>
+          </el-sub-menu>
+        </template>
       </el-menu>
     </el-aside>
 

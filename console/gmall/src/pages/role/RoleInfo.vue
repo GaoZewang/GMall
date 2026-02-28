@@ -3,7 +3,7 @@
     <el-card shadow="never" v-loading="loading">
       <div v-if="info" class="grid">
         <el-card shadow="never" class="panel">
-          <div class="panelTitle">基本信息</div>
+          <div class="panelTitle">角色信息</div>
 
           <div class="name">{{ info.name }}</div>
 
@@ -14,22 +14,12 @@
           </div>
 
           <div class="kv">
-            <div class="k">店铺ID</div><div class="v">{{ info.id }}</div>
-            <div class="k">商户ID</div><div class="v">{{ info.merchant_id }}</div>
-            <div class="k">商户名称</div><div class="v">{{ info.merchant_name ?? '未知' }}</div>
-            <div class="k">管理员ID</div><div class="v">{{ info.admin_user_id }}</div>
-            <div class="k">管理员名称</div><div class="v">{{ info.admin_user_name ?? '未知' }}</div>
-            <div class="k">联系电话</div><div class="v">{{ info.contact_phone }}</div>
-            <div class="k">余额</div><div class="v">{{ info.balance }}</div>
-            <div class="k">营业额</div><div class="v">{{ info.revenue }}</div>
-            <div class="k">创建时间</div><div class="v">{{ info.created_at }}</div>
-            <div class="k">更新时间</div><div class="v">{{ info.updated_at }}</div>
+            <div class="k">角色ID</div><div class="v">{{ info.id }}</div>
+            <div class="k">角色标识</div><div class="v">{{ info.slug || '未设置' }}</div>
+            <div class="k">角色描述</div><div class="v">{{ info.description }}</div>
+            <div class="k">创建时间</div><div class="v">{{ info.created_at || '未知' }}</div>
+            <div class="k">更新时间</div><div class="v">{{ info.updated_at || '未知' }}</div>
           </div>
-
-          <el-divider />
-
-          <div class="panelTitle">店铺地址</div>
-          <div class="address">{{ info.address || '未设置' }}</div>
         </el-card>
       </div>
     </el-card>
@@ -39,20 +29,20 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { adminShopInfoApi, type Shop } from '../../api/shop'
+import { adminRoleInfoApi, type Role } from '../../api/role'
 
 const route = useRoute()
 const router = useRouter()
 
 const loading = ref(false)
-const info = ref<Shop | null>(null)
+const info = ref<Role | null>(null)
 
 async function load() {
   const id = Number(route.params.id)
   if (!id) return
   loading.value = true
   try {
-    const res = await adminShopInfoApi(id)
+    const res = await adminRoleInfoApi(id)
     info.value = res
   } finally {
     loading.value = false
@@ -109,15 +99,5 @@ onMounted(load)
 .v {
   color: #303133;
   word-break: break-all;
-}
-
-.address {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #303133;
-  background-color: #ffffff;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #e4e7ed;
 }
 </style>

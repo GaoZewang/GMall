@@ -1,0 +1,525 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "默认模块",
+    "description": "系统配置管理接口",
+    "version": "1.0.0"
+  },
+  "tags": [],
+  "paths": {
+    "/admin/permission/list": {
+      "get": {
+        "summary": "权限列表",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "权限名",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "url",
+            "in": "query",
+            "description": "权限路由",
+            "required": false,
+            "example": "",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "title": "权限id"
+                          },
+                          "name": {
+                            "type": "string",
+                            "title": "权限名"
+                          },
+                          "code": {
+                            "type": "string",
+                            "title": "权限code"
+                          },
+                          "route_url": {
+                            "type": "string",
+                            "title": "路径"
+                          },
+                          "icon": {
+                            "type": "string",
+                            "title": "图标"
+                          },
+                          "description": {
+                            "type": "string",
+                            "title": "描述"
+                          },
+                          "parent_id": {
+                            "type": "integer",
+                            "title": "父级id"
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "code": {
+                                  "type": "string"
+                                },
+                                "route_url": {
+                                  "type": "string"
+                                },
+                                "icon": {
+                                  "type": "null"
+                                },
+                                "description": {
+                                  "type": "string"
+                                },
+                                "parent_id": {
+                                  "type": "integer"
+                                },
+                                "children": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "title": "子级"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "msg",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "ok",
+                  "data": [
+                    {
+                      "id": 1,
+                      "name": "1",
+                      "code": "1",
+                      "route_url": "1",
+                      "icon": "1",
+                      "description": "1111",
+                      "parent_id": 0,
+                      "children": [
+                        {
+                          "id": 7,
+                          "name": "测试权限",
+                          "code": "csZqx",
+                          "route_url": "/admin/permission/create1",
+                          "icon": null,
+                          "description": "测试添加权限",
+                          "parent_id": 1,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/permission/create": {
+      "post": {
+        "summary": "权限添加",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "description": "权限code",
+                    "example": "测试权限",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "权限代码",
+                    "example": "csZqx",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "权限描述",
+                    "example": "测试添加权限",
+                    "type": "string"
+                  },
+                  "is_show": {
+                    "description": "是否展示在菜单栏",
+                    "example": "0",
+                    "type": "string"
+                  },
+                  "parent_id": {
+                    "description": "父级id",
+                    "example": "0",
+                    "type": "string"
+                  },
+                  "route_url": {
+                    "description": "权限路径",
+                    "example": "/admin/permission/create1",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "description": "权限图标",
+                    "example": "tu",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "code",
+                  "description",
+                  "is_show",
+                  "parent_id",
+                  "route_url",
+                  "icon"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "msg",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "ok",
+                  "data": []
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/permission/update": {
+      "post": {
+        "summary": "权限修改",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "权限id",
+                    "example": "1",
+                    "type": "string"
+                  },
+                  "name": {
+                    "description": "权限名称",
+                    "example": "1",
+                    "type": "string"
+                  },
+                  "icon": {
+                    "description": "权限图标",
+                    "example": "1",
+                    "type": "string"
+                  },
+                  "code": {
+                    "description": "权限标识符",
+                    "example": "1",
+                    "type": "string"
+                  },
+                  "route_url": {
+                    "description": "权限路径",
+                    "example": "1",
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "权限描述",
+                    "example": "1111",
+                    "type": "string"
+                  },
+                  "is_show": {
+                    "description": "权限是否在左侧菜单栏显示",
+                    "example": "1",
+                    "type": "string"
+                  },
+                  "parent_id": {
+                    "description": "父级id",
+                    "example": "0",
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/permission/info": {
+      "get": {
+        "summary": "权限详情",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "",
+            "required": false,
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer"
+                    },
+                    "msg": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "title": "权限id"
+                        },
+                        "name": {
+                          "type": "string",
+                          "title": "权限名"
+                        },
+                        "icon": {
+                          "type": "string",
+                          "title": "权限图标"
+                        },
+                        "parent_id": {
+                          "type": "integer",
+                          "title": "父级id"
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "描述"
+                        },
+                        "status": {
+                          "type": "integer",
+                          "title": "状态"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "icon",
+                        "parent_id",
+                        "description",
+                        "status"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "msg",
+                    "data"
+                  ]
+                },
+                "example": {
+                  "code": 200,
+                  "msg": "ok",
+                  "data": {
+                    "id": 1,
+                    "name": "1",
+                    "icon": "1",
+                    "parent_id": 0,
+                    "description": "1111",
+                    "status": 1
+                  }
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/admin/permission/del": {
+      "post": {
+        "summary": "权限删除",
+        "deprecated": false,
+        "description": "",
+        "tags": [],
+        "parameters": [],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "description": "权限id",
+                    "example": "1",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "examples": {}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {}
+                }
+              }
+            },
+            "headers": {}
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {},
+    "securitySchemes": {
+      "bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "servers": [],
+  "security": [
+    {
+      "bearer": []
+    }
+  ]
+}

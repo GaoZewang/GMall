@@ -39,9 +39,9 @@ class AuthService
         if($userInfo['status']!=1){
             throw new \RuntimeException('用户被禁用','400');
         }
-        if($this->role[$platform]!=$userInfo['role_id']){
-            throw new \RuntimeException('用户适用平台错误','400');
-        }
+//        if($this->role[$platform]!=$userInfo['role_id']){
+//            throw new \RuntimeException('用户适用平台错误','400');
+//        }
         // 这里用你自己的用户表
         if (!password_verify($password, $userInfo['password'])) {
             throw new \RuntimeException('用户名或密码错误','400');
