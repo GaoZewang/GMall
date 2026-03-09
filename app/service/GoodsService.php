@@ -6,10 +6,13 @@
  * @Date      2025/12/7 14:55
  */
 
-namespace app\admin\service;
+namespace app\service;
 
 use app\model\BaseModel;
+use app\validate\BaseValidate;
 use support\Db;
+use support\Request;
+use support\Response;
 
 class GoodsService
 {
@@ -23,6 +26,31 @@ class GoodsService
     private function encodeJsonField(array $data, string $key):?string
     {
         return !empty($data[$key]) ? json_encode($data[$key], JSON_UNESCAPED_UNICODE) : null;
+    }
+
+    /**
+     * 商品列表
+     * @param $params
+     * @return array
+     */
+    public function getList($params):array
+    {
+        $where=[];
+        $where[]=['is_deleted','=',0];
+        if(!empty($params['goods_name'])){
+            $where[]=['goods_name','like',"%{$params['goods_name']}%"];
+        }
+        if(!empty($params['category_id'])){
+            $where[]=['category_id','=',$params['category_id']];
+        }
+        if(isset($params['goods_status'])&&in_array($params['goods_status'],[0,1])){
+            $where[]=['goods_status','=',$params['goods_status']];
+        }
+
+        $service=new BaseService('goods');
+        $filed=['id','merchant_id','goods_code','goods_name','subtitle','category_id','cover_image','goods_status'];
+        $data=$service->getListWithPage($where,$filed,'id','desc',$params['page'],$params['per_page']);
+        return $data;
     }
 
     /**

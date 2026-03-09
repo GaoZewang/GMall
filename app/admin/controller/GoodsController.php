@@ -8,7 +8,7 @@
 
 namespace app\admin\controller;
 
-use app\admin\service\GoodsService;
+use app\service\GoodsService;
 use app\admin\validate\GoodsValidate;
 use app\service\BaseService;
 use app\validate\BaseValidate;
@@ -22,24 +22,11 @@ class GoodsController
      * @param Request $request
      * @return Response
      */
-    public function getList(Request $request):Response
+    public function getList(Request $request,GoodsService $goodsService):Response
     {
-        $where=[];
         $params=$request->all();
-        $where[]=['is_deleted','=',0];
-        if(!empty($params['goods_name'])){
-            $where[]=['goods_name','like',"%{$params['goods_name']}%"];
-        }
-        if(!empty($params['category_id'])){
-            $where[]=['category_id','=',$params['category_id']];
-        }
-        if(isset($params['goods_status'])&&in_array($params['goods_status'],[0,1])){
-            $where[]=['goods_status','=',$params['goods_status']];
-        }
         BaseValidate::validate($params,'list');
-        $service=new BaseService('goods');
-        $filed=['id','merchant_id','goods_code','goods_name','subtitle','category_id','cover_image','goods_status'];
-        $data=$service->getListWithPage($where,$filed,'id','desc',$params['page'],$params['per_page']);
+        $data=$goodsService->getList($params);
         return success($data);
     }
 
@@ -48,12 +35,11 @@ class GoodsController
      * @param Request $request
      * @return Response
      */
-    public function getInfo(Request $request):Response
+    public function getInfo(Request $request,GoodsService $goodsService):Response
     {
         $params=$request->get();
         BaseValidate::validate($params,'info');
-        $service=new GoodsService;
-        $data=$service->getGoodsInfo($params['id'],['*']);
+        $data=$goodsService->getGoodsInfo($params['id'],['*']);
         return success($data);
     }
 
@@ -62,13 +48,12 @@ class GoodsController
      * @param Request $request
      * @return Response
      */
-    public function createOption(Request $request):Response
+    public function createOption(Request $request,GoodsService $goodsService):Response
     {
-        $goodService=new GoodsService;
         $params=$request->post();
         $params['merchant_id']=1;
         GoodsValidate::validate($params,'add');
-        $res= $goodService->createGoods($params['merchant_id'],$request->post());
+        $res= $goodsService->createGoods($params['merchant_id'],$request->post());
         if($res){
             return success($res);
         }
@@ -80,13 +65,12 @@ class GoodsController
      * @param Request $request
      * @return Response
      */
-    public function updateOption(Request $request):Response
+    public function updateOption(Request $request,GoodsService $goodsService):Response
     {
-        $goodService=new GoodsService;
         $params=$request->post();
         $params['merchant_id']=1;
         GoodsValidate::validate($params,'edit');
-        $res= $goodService->updateGoods($params['merchant_id'],$request->post());
+        $res= $goodsService->updateGoods($params['merchant_id'],$request->post());
         if($res){
             return success();
         }
@@ -115,13 +99,12 @@ class GoodsController
      * @param Request $request
      * @return Response
      */
-    public function deleteOption(Request $request):Response
+    public function deleteOption(Request $request,GoodsService $goodsService):Response
     {
-        $goodService=new GoodsService;
         $params=$request->get();
         BaseValidate::validate($params,'info');
         $id=explode(',',$params['id']);
-        $res= $goodService->deleteGoods(['id'=>$id]);
+        $res= $goodsService->deleteGoods(['id'=>$id]);
         if($res){
             return success();
         }
