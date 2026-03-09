@@ -20,7 +20,7 @@ class SystemCategoryService
            $parentTreePath = ''; // 顶级没有父路径
        } else {
            // 查询父类目
-           $parent = BaseModel::make('system_category')
+           $parent = BaseModel::make([],'system_category')
                ->where('id', $parentId)
                ->where('category_status', 1)       // 可选：只允许挂在启用类目下
                ->first();

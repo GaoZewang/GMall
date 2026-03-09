@@ -8,7 +8,8 @@ const Dashboard = () => import('../pages/Dashboard.vue')
 const Goods = () => import('../pages/goods/Goods.vue')
 const GoodsInfo = () => import('../pages/goods/GoodsInfo.vue')
 const Orders = () => import('../pages/order/Orders.vue')
-const Users = () => import('../pages/user/Users.vue')
+const User = () => import('../pages/user/User.vue')
+const UserInfo = () => import('../pages/user/UserInfo.vue')
 const Merchant = () => import('../pages/merchant/Merchant.vue')
 const MerchantCreate = () => import('../pages/merchant/MerchantCreate.vue')
 const MerchantDetail = () => import('../pages/merchant/MerchantDetail.vue')
@@ -54,7 +55,8 @@ const router = createRouter({
         { path: 'category/:id', component: CategoryInfo, meta: { title: '分类详情' } },
         
         { path: 'orders', component: Orders, meta: { title: '订单管理' } },
-        { path: 'users', component: Users, meta: { title: '用户管理' } },
+        { path: 'user', component: User, meta: { title: '用户管理' } },
+        { path: 'user/:id', component: UserInfo, meta: { title: '用户详情' } },
         
         { path: 'system', component: System, meta: { title: '系统设置' } },
         { path: 'role', component: Role, meta: { title: '角色管理' } },

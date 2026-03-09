@@ -10,32 +10,20 @@ namespace app\admin\controller;
 
 use support\Request;
 use support\Response;
-use app\validate\BaseValidate;
-use app\service\BaseService ;
+use app\service\UserService;
 
 class UserController
 {
     /**
      * 用户列表
      * @param Request $request
+     * @param UserService $userService
      * @return Response
      */
-    public function getList(Request $request):Response
+    public function getList(Request $request,UserService $userService):Response
     {
-        $where=[];
         $params=$request->get();
-        if($params['username']){
-            $where[]=['username','like',"%{$params['username']}"];
-        }
-        if($params['phone']){
-            $where[]=['phone','like',"%{$params['nickname']}"];
-        }
-        if($params['nickname']){
-            $where[]=['nickname','like',"%{$params['nickname']}"];
-        }
-        BaseValidate::validate($params,'list');
-        $service=new BaseService('user');
-        $data= $service->getListWithPage($where,['*'],'id','desc',$params['page'],$params['per_page']);
+        $data=$userService->getList($params);
         return success($data);
     }
 
@@ -44,12 +32,10 @@ class UserController
      * @param Request $request
      * @return Response
      */
-    public function getInfo(Request $request):Response
+    public function getInfo(Request $request,UserService $userService):Response
     {
         $params=$request->get();
-        BaseValidate::validate($params,'info');
-        $service=new BaseService('user');
-        $data= $service->getInfo(['id'=>$params['id']]);
+        $data=$userService->getInfo($params);
         return success($data);
     }
 
@@ -58,18 +44,12 @@ class UserController
      * @param Request $request
      * @return Response
      */
-    public function editUser(Request $request):Response
+    public function editUser(Request $request,UserService $userService):Response
     {
         $params=$request->post();
         unset($params['password']);
         unset($params['balance']);
-        $service=new BaseService('user');
-        $res= $service->edit(['id'=>$params['id']],$params);
-        if($res){
-            return success();
-        }
-        return error();
-
+        return $userService->editUser($params);
     }
 
     /**
@@ -77,15 +57,10 @@ class UserController
      * @param Request $request
      * @return Response
      */
-    public function changeBalance(Request $request): Response
+    public function changeBalance(Request $request,UserService $userService): Response
     {
         $params=$request->post();
-        $service=new BaseService('user');
-        $res= $service->edit(['id'=>$params['id']],['balance'=>$params['balance']]);
-        if($res){
-            return success();
-        }
-        return error();
+        return $userService->changeBalance($params);
     }
 
     /**
@@ -93,14 +68,9 @@ class UserController
      * @param Request $request
      * @return Response
      */
-    public function resetPassword(Request $request): Response
+    public function resetPassword(Request $request,UserService $userService): Response
     {
         $params=$request->post();
-        $service=new BaseService('user');
-        $res= $service->edit(['id'=>$params['id']],['password'=>password_hash('123456',PASSWORD_DEFAULT)]);
-        if($res){
-            return success();
-        }
-        return error();
+        return $userService->resetPassword($params);
     }
 }

@@ -39,7 +39,7 @@ class SystemRoleController
         $filed=['id','name','description','status','permissions','created_at','slug','updated_at'];
         $service=new BaseService('system_role');
         $data=$service->getInfo(['id'=>$params['id']],$filed);
-        $data['permissions']=json_decode($data['permissions'],true);
+        $data['permissions']=empty($data['permissions'])?[]:json_decode($data['permissions'],true);
         return success($data) ;
     }
 

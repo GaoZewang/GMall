@@ -89,7 +89,7 @@ const router = useRouter()
 /** KPI（mock） */
 const kpis = ref([
   { key: 'newUsers', title: '新增用户', value: '128', sub: '今日' },
-  { key: 'newMerchants', title: '新增商户', value: '4', sub: '今日' },
+  { key: 'newMerchants', title: '新增商品', value: '4', sub: '今日' },
   { key: 'newStores', title: '新增店铺', value: '11', sub: '今日' },
   { key: 'orders', title: '订单数', value: '326', sub: '今日' },
 ])

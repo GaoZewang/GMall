@@ -28,9 +28,7 @@
         row-key="id"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
-        <el-table-column label="ID" prop="id" width="80" />
         <el-table-column label="分类名称" prop="category_name" min-width="200" />
-        <el-table-column label="父级ID" prop="parent_id" width="100" />
         <!-- ✅ 状态：Switch -->
         <el-table-column label="状态" width="140">
           <template #default="{ row }">
@@ -47,9 +45,8 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" width="220" fixed="right">
+        <el-table-column label="操作" width="100" fixed="right">
           <template #default="{ row }">
-            <el-button link type="primary" @click="onView(row)">查看</el-button>
             <el-button link @click="onEdit(row)">编辑</el-button>
           </template>
         </el-table-column>

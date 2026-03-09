@@ -80,7 +80,6 @@ export type CreateGoodsPayload = {
   goods_name: string
   subtitle: string
   category_id: number
-  brand_id: number
   cover_image: string
   images: string[]
   description: string
@@ -118,7 +117,6 @@ export type UpdateGoodsPayload = {
   good_name?: string
   subtitle: string
   category_id: number
-  brand_id: number
   cover_image: string
   images: string[]
   description: string

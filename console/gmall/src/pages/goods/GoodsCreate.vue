@@ -36,12 +36,6 @@
               </el-select>
             </el-form-item>
           </el-col>
-
-          <el-col :xs="24" :md="12">
-            <el-form-item label="品牌" prop="brand_id">
-              <el-input-number v-model="form.brand_id" :min="1" style="width: 100%" />
-            </el-form-item>
-          </el-col>
         </el-row>
 
         <!-- 图片（上传+URL） -->
@@ -349,7 +343,6 @@ type CreateGoodsPayload2 = {
   goods_name: string
   subtitle: string
   category_id: number
-  brand_id: number
   cover_image: string
   images: string[]
   description: string
@@ -385,7 +378,6 @@ const form = reactive<{
   goods_name: string
   subtitle: string
   category_id: number
-  brand_id: number
   cover_image: string
   images: string[]
   description: string
@@ -394,7 +386,6 @@ const form = reactive<{
   goods_name: '',
   subtitle: '',
   category_id: 1,
-  brand_id: 1,
   cover_image: '',
   images: [],
   description: '',
@@ -412,7 +403,6 @@ const rules: FormRules = {
   goods_name: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
   subtitle: [{ required: true, message: '请输入副标题', trigger: 'blur' }],
   category_id: [{ required: true, message: '请选择类目', trigger: 'change' }],
-  brand_id: [{ required: true, message: '请输入品牌', trigger: 'change' }],
   cover_image: [{ required: true, message: '请上传/填写封面图', trigger: 'blur' }],
   description: [{ required: true, message: '请输入图文详情 HTML', trigger: 'blur' }],
 }
@@ -645,7 +635,6 @@ function buildPayload(): CreateGoodsPayload2 {
     goods_name: (form.goods_name || '').trim(),
     subtitle: (form.subtitle || '').trim(),
     category_id: Number(form.category_id),
-    brand_id: Number(form.brand_id),
     cover_image: (form.cover_image || '').trim(),
     images: form.images.map(i => (i || '').trim()).filter(Boolean),
     description: form.description || '',
@@ -667,7 +656,6 @@ async function loadGoodsInfo() {
     form.goods_name = data.goods_name || ''
     form.subtitle = data.subtitle || ''
     form.category_id = data.category_id || 0
-    form.brand_id = data.brand_id || 0
     form.cover_image = data.cover_image || ''
     form.images = data.images || []
     form.description = data.description || ''

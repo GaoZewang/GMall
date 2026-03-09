@@ -7,7 +7,7 @@ export const adminMenus: MenuItem[] = [
   { title: '店铺管理', path: '/shop' },
   { title: '分类管理', path: '/category' },
   { title: '订单管理', path: '/orders' },
-  { title: '用户管理', path: '/users' },
+  { title: '用户管理', path: '/user' },
   { title: '系统设置', path: '/system',
     children: [
       { title: '配置中心', path: '/system' },
